@@ -1,0 +1,10 @@
+[book]
+title = "Discord Webhooks Guide"
+authors = ["Birdie0"]
+description = "Comprehensive Guide about using Discord Webhooks"
+src = "docs"
+language = "en"
+
+[output.html]
+default-theme = "rust"
+preferred-dark-theme = "ayu"

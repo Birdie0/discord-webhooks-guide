@@ -1,0 +1,58 @@
+name: Deploy docs
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Generate docs
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.x
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |-
+          pnpm install --frozen-lockfile
+
+      - name: Generate highlight.js file
+        run: |-
+          ./scripts/highlight.sh
+
+      - name: Install latest mdBook
+        run: |-
+          tag="$(curl -sS 'https://api.github.com/repos/rust-lang/mdBook/releases/latest' | jq -r '.tag_name')"
+          url="https://github.com/rust-lang/mdBook/releases/download/${tag}/mdbook-${tag}-x86_64-unknown-linux-gnu.tar.gz"
+          mkdir -p mdBook
+          curl -sSL "$url" | tar -xz -C mdBook
+          echo "$PWD/mdBook" >> $GITHUB_PATH
+
+      - name: Build docs
+        run: |-
+          mdbook build
+
+      - name: Minify docs
+        run: |-
+          ./scripts/minify.sh
+
+      - name: Publish docs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: ./book
+          force_orphan: true
+          full_commit_message: deploy

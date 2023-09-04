@@ -1,0 +1,9 @@
+# build output
+/book/
+
+# highlight.js
+/theme/highlight.js
+
+# node
+/node_modules/
+.pnpm-debug.log*
