@@ -46,6 +46,8 @@
 
 # Additional info
 
+* [Edit Webhook Message](other/edit_webhook_message.md)
+* [Rate Limits](other/rate_limits.md)
 * [Discord Markdown](other/discord_markdown.md)
 * [Slack formatting](other/slack_formatting.md)
 * [Field Limits](other/field_limits.md)

@@ -1,6 +1,6 @@
 # Epilogue
 
-I hope this guide will help you make cool things for your server. I spent on this guide a lot of time with checking Discord API documentation and testing webhooks with different parameters. The main reason why I made this guide is there was no detailed guide about using webhooks. Existing ones describe using webhooks with known services with premade json body without showing how flexible settings are.
+I hope this guide will help you make cool things for your server. I spent on this guide a lot of time with checking Discord API documentation and testing webhooks with different parameters. The main reason why I made this guide is there was no detailed guide about using webhooks. Existing ones describe using webhooks with known services with pre-made json body without showing how flexible settings are.
 Existing ones were like *copy & paste* and nothing more. I do not like that.
 
 If you wanna suggest something, like Applet recipe or something fancy, please, let me know. My Discord tag is `birdie0` (was `Birdie♫#6017`).

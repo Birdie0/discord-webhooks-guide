@@ -18,7 +18,7 @@ JSON is data-storing format that easy to read and write for humans and robots.
 * `key: value` - this is key-value pair.
 * Key and value are separated with semicolon (`:`), no exceptions.
 * Multiple key-values are separated with comma (`,`), no exceptions.
-* Spaces and linebreaks are ok till they not the part of key or value.
+* Spaces and line breaks are ok till they not the part of key or value.
 * The `key` is always text inserted between double quotes (`" "`).
 * But `value` can be different types:
   * **string** - `"sample text"`, `"cool\nthings"`

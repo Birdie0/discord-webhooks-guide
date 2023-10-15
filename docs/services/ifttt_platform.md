@@ -2,7 +2,7 @@
 
 [IFTTT Platform](https://platform.ifttt.com/) allows you to create and publish applets, so you can share it with the others. Also it allows to put script that will execute after applet being triggered, so you can modify output data and skip actions to custom conditions, that script is called Filter code.
 
-Filter code is written in TypeScript, but JavaScript code shoud work too. If you're relying on [type coercion](https://developer.mozilla.org/docs/Glossary/Type_coercion) you'll need to manually convert values to right types, code window has build-in linter, it will tell what's wrong.
+Filter code is written in TypeScript, but JavaScript code should work too. If you're relying on [type coercion](https://developer.mozilla.org/docs/Glossary/Type_coercion) you'll need to manually convert values to right types, code window has build-in linter, it will tell what's wrong.
 
 👉 **Update:** Before, Filter code was exclusively IFTTT Platform feature, but now it can be used on main website too (Pro subscription required).
 

@@ -62,7 +62,7 @@ Image preview won't be shown and if content has more than 2048 characters, reque
 
 ## Link embed
 
-Best with link post which are video or gifs. `"allowed_mentions"` will disable everyone/here mentions in content if there any, user/role mentions will still work if you wish to add any. big text posts (over 1k characters).
+Best with link post which are video or GIFs. `"allowed_mentions"` will disable everyone/here mentions in content if there any, user/role mentions will still work if you wish to add any. big text posts (over 1k characters).
 
 ```json
 {

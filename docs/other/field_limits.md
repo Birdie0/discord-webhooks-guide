@@ -15,4 +15,4 @@
 | `file` (not actual field name)     | 10 files         |
 | sum of characters in marked fields | 6000 characters  |
 
-[Discord API docs reference](https://discord.com/developers/docs/resources/channel#embed-object-embed-limits)
+[Discord API reference](https://discord.com/developers/docs/resources/channel#embed-object-embed-limits)

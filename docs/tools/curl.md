@@ -16,9 +16,9 @@ so it can be run from anywhere. Using a package manager is preferable as it simp
 ### Bash/Zsh/etc.
 
 ```sh
+# Usually, request also includes `-X POST` to set request verb to POST, but using `-d` does that automatically.
 # -H "Content-Type: application/json" - adds header that tells server you're sending JSON data.
 # -d '{"username": "test", "content": "hello"}' - sets request data.
-# Using -d also sets method to POST, so -X POST can be ommited.
 curl -H "Content-Type: application/json" -d '{"username": "test", "content": "hello"}' "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
 
 # To make command more readable you can split it to multiple lines using backslash `\`
@@ -62,10 +62,10 @@ curl ^
 ## Sending attachments
 
 ```sh
+# Adding `-H "Content-Type: multipart/form-data"` is not required as `-F` sets it automatically.
 # -F 'payload_json={}' - sets json body.
 # -F "file1=@cat.jpg" - adds cat.jpg file as attachment.
 # -F "file2=@images/dog.jpg" - adds dog.jpg file from images directory.
-# Using -F also sets "Content-Type: multipart/form-data" header specifying it can be ommited.
 curl \
   -F 'payload_json={"username": "test", "content": "hello"}' \
   -F "file1=@cat.jpg" \

@@ -18,9 +18,9 @@ Check [docs](https://httpie.io/docs#installation) for installation details.
 # set url variable to type less and make command more readable
 export WEBHOOK_URL="https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
 http -j post $WEBHOOK_URL username="Cat" content="meow" embeds:='[{"title": "Cool!"}]'
-# -j/--json flag sets json header, but it's used by default so it can be ommited.
+# -j/--json flag sets json header, but it's used by default so it can be omitted.
 http post $WEBHOOK_URL username="Cat" content="meow" embeds:='[{"title": "Cool!"}]'
-# Default method is GET, but adding data makes it switch to POST so you can ommit it too.
+# Default method is GET, but adding data makes it switch to POST so you can omit it too.
 http $WEBHOOK_URL username="Cat" content="meow" embeds:='[{"title": "Cool!"}]'
 ```
 

@@ -1,6 +1,6 @@
 # allowed_mentions
 
-Allows to supress pings by users, roles or everyone/here mentions. `allowed_mentions` object and can contain next parameters:
+Allows to suppress pings by users, roles or everyone/here mentions. `allowed_mentions` object and can contain next parameters:
 
 * `parse` - array and can include next values:
   * "everyone" - if present everyone/here will ping.
@@ -49,7 +49,7 @@ Here's some examples:
   }
   ```
 
-* Will ping everyone with disabled everyone/here mention supress, all users mentioned in message (i. e. `user-id` user) or with `role-id` role (unless enabled role mention supress).
+* Will ping everyone with disabled everyone/here mention suppress, all users mentioned in message (i. e. `user-id` user) or with `role-id` role (unless enabled role mention suppress).
 
   ```json
   {
@@ -61,4 +61,4 @@ Here's some examples:
   }
   ```
 
-[Discord API docs reference](https://discord.com/developers/docs/resources/channel#allowed-mentions-object)
+[Discord API reference](https://discord.com/developers/docs/resources/channel#allowed-mentions-object)
