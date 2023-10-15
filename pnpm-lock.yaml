@@ -18,8 +18,8 @@ dependencies:
     specifier: ^3.0.2
     version: 3.0.2
   terser:
-    specifier: ^5.19.4
-    version: 5.19.4
+    specifier: ^5.21.0
+    version: 5.21.0
 
 packages:
 
@@ -381,8 +381,8 @@ packages:
       picocolors: 1.0.0
     dev: false
 
-  /terser@5.19.4:
-    resolution: {integrity: sha512-6p1DjHeuluwxDXcuT9VR8p64klWJKo1ILiy19s6C9+0Bh2+NWTX6nD9EPppiER4ICkHDVB1RkVpin/YW2nQn/g==}
+  /terser@5.21.0:
+    resolution: {integrity: sha512-WtnFKrxu9kaoXuiZFSGrcAvvBqAdmKx0SFNmVNYdJamMu9yyN3I/QF0FbH4QcqJQ+y1CJnzxGIKH0cSj+FGYRw==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:

@@ -3,7 +3,7 @@
 (
   set -e
 
-  # go highlight.js package folder and install dependencies
+  # go to highlight.js package folder and install dependencies
   cd node_modules/highlight.js
   pnpm import
   pnpm install
