@@ -9,6 +9,10 @@
 Also, you can download executable from their website and run it from a directory or make it discoverable through `PATH`,
 so it can be run from anywhere. Using a package manager is preferable as it simplifies the process of installing and updating the tool.
 
+Windows and MacOS come with outdated versions of curl. After installing curl, run `curl --version` (or `curl.exe --version` in
+PowerShell) to ensure you are running the newest version. You may need to change the order of directories in the `PATH` variable to
+ensure the correct curl executable comes first.
+
 ## Usage
 
 `curl -H "Content-Type: application/json" -d <body> <link>`
@@ -31,18 +35,33 @@ curl \
   $WEBHOOK_URL
 ```
 
-### PowerShell
+### PowerShell 5.1 and below (powershell.exe)
+
+This is the default version of PowerShell on Windows
 
 ```ps1
 # In PowerShell you have to escape " with \ inside strings, so body string be parsed correctly.
 $WEBHOOK_URL = "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
-curl -H "Content-Type: application/json" -d '{\"username\": \"test\", \"content\": \"hello\"}' $WEBHOOK_URL
+# In PowerShell, "curl" is an alias for the function Invoke-WebRequest, so we need to specify "curl.exe" instead
+curl.exe -H "Content-Type: application/json" -d '{\"username\": \"test\", \"content\": \"hello\"}' $WEBHOOK_URL
 
 # ` is used for making command multiline
 curl `
   -H "Content-Type: application/json" `
   -d '{\"username\": \"test\", \"content\": \"hello\"}' `
   $WEBHOOK_URL
+```
+
+### PowerShell Core / PowerShell 6 and above (pwsh.exe)
+
+```ps1
+$WEBHOOK_URL = "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
+# In newer versions of PowerShell, escaping " with \ is not necessary (and doesn't work)
+$BODY = '{"username": "test", "content": "hello"}'
+# Alternatively, we can use PowerShell hashtables with the ConvertTo-Json function; run `Get-Help ConvertTo-Json` for more info
+$BODY = @{ username = "test"; content = "hello" } | ConvertTo-Json
+# In PowerShell, "curl" is an alias for the function Invoke-WebRequest, so we need to specify "curl.exe" instead
+curl.exe -H "Content-Type: application/json" -d $BODY $WEBHOOK_URL
 ```
 
 ### Command Prompt (cmd.exe)
