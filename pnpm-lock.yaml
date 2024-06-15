@@ -18,8 +18,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       svgo:
-        specifier: ^3.3.2
-        version: 3.3.2
+        specifier: ~3.1.0
+        version: 3.1.0
       terser:
         specifier: ^5.31.1
         version: 5.31.1
@@ -231,8 +231,8 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
-  svgo@3.3.2:
-    resolution: {integrity: sha512-OoohrmuUlBs8B8o6MB2Aevn+pRIH9zDALSR+6hhqVfa6fRwG/Qw9VUMSMW9VNg2CFc/MTIfabtdOVl9ODIJjpw==}
+  svgo@3.1.0:
+    resolution: {integrity: sha512-R5SnNA89w1dYgNv570591F66v34b3eQShpIBcQtZtM5trJwm1VvxbIoMpRYY3ybTAutcKTLEmTsdnaknOHbiQA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -454,7 +454,7 @@ snapshots:
 
   source-map@0.6.1: {}
 
-  svgo@3.3.2:
+  svgo@3.1.0:
     dependencies:
       '@trysound/sax': 0.2.0
       commander: 7.2.0
