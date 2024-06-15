@@ -6,7 +6,7 @@
 * Linux - can be installed with built-in package manager or [Homebrew](https://brew.sh/).
 * macOS - can be installed with [Homebrew](https://brew.sh/) or [MacPorts](https://www.macports.org/).
 
-Check [docs](https://httpie.io/docs#installation) for installation details.
+Check [docs](https://httpie.io/docs/cli/installation) for installation details.
 
 ## Usage
 
@@ -15,13 +15,10 @@ Check [docs](https://httpie.io/docs#installation) for installation details.
 ### for Bash/Zsh/etc.
 
 ```sh
-# set url variable to type less and make command more readable
-export WEBHOOK_URL="https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
-http -j post $WEBHOOK_URL username="Cat" content="meow" embeds:='[{"title": "Cool!"}]'
-# -j/--json flag sets json header, but it's used by default so it can be omitted.
-http post $WEBHOOK_URL username="Cat" content="meow" embeds:='[{"title": "Cool!"}]'
-# Default method is GET, but adding data makes it switch to POST so you can omit it too.
-http $WEBHOOK_URL username="Cat" content="meow" embeds:='[{"title": "Cool!"}]'
+# Optional flags and method were omitted:
+# if unspecified method is set to POST if body is specified
+# -j/--json forces JSON mode, yet it's default behavior
+http "https://discord.com/api/webhooks/123/w3bh00k_t0k3n" content="test" embeds[0][title]="text"
 ```
 
 Depends on type of value you have to use different separators:
@@ -31,21 +28,26 @@ Depends on type of value you have to use different separators:
 * `@` - embed file.
 * `=@` - embed json file.
 
+```sh
+http \
+  "https://discord.com/api/webhooks/123/w3bh00k_t0k3n" \
+  content="test" \
+  embeds[0][title]="text"
+```
+
 Also, if you don't want to mess with these and would like to just pass raw body, like can be done in `curl`, use the next approach:
 
 ```sh
-echo '{"username": "Cat", "content": "meow", "embeds": [{"title": "Cool!"}]}' | http $WEBHOOK_URL
+echo -n '{"content": "test", "embeds": [{"title": "text"}]}' | http "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
 ```
 
 ### PowerShell
 
 ```ps1
-# In PowerShell you have to escape " with \ inside strings, so body string be parsed correctly.
 $WEBHOOK_URL = "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
-http $WEBHOOK_URL username="Cat" content="meow" embeds:='[{\"title\": \"Cool!\"}]'
-
+http $WEBHOOK_URL content="test" embeds[0][title]="text"
 # Also you can just pass raw json body:
-'{"username": "Cat", "content": "meow", "embeds": [{"title": "Cool!"}]}' | http $WEBHOOK_URL
+'{"content": "test", "embeds": [{"title": "text"}]}' | http $WEBHOOK_URL
 ```
 
 ### Command Prompt (cmd.exe)
@@ -53,21 +55,21 @@ http $WEBHOOK_URL username="Cat" content="meow" embeds:='[{\"title\": \"Cool!\"}
 ```bat
 REM Notice escaped double quotes around values and none around link
 SET WEBHOOK_URL=https://discord.com/api/webhooks/123/w3bh00k_t0k3n
-http %WEBHOOK_URL% username="Cat" content="meow" embeds:="[{\"title\": \"Cool!\"}]"
+http %WEBHOOK_URL% content="test" embeds[0][title]="text"
 
 REM Outer quotes are skipped due to cmd parsing
-echo {"username": "Cat", "content": "meow", "embeds": [{"title": "Cool!"}]} | http %WEBHOOK_URL%
+echo {"content": "test", "embeds": [{"title": "text"}]} | http %WEBHOOK_URL%
 ```
 
 ## Sending attachments
 
 ```sh
 # -f flag sets "Content-Type: multipart/form-data" header.
-# payload_json='{}' - sets json body.
+# payload_json='{}' - when sending files json can provided with this field.
 # file1@cat.jpg - adds cat.jpg file as attachment.
 # file2@images/dog.jpg - adds dog.jpg file from images directory.
 http -f $WEBHOOK_URL \
-  payload_json='{"username": "test", "content": "hello"}' \
+  payload_json='{"content": "test", "embeds": [{"title": "text"}]}' \
   file1@cat.jpg \
   file2@images/dog.jpg
 ```
