@@ -5,7 +5,7 @@
 
   # go to highlight.js package folder and install dependencies
   cd node_modules/highlight.js
-  pnpm import
+  pnpm import || true
   pnpm install
 
   # generate highlight.js file
