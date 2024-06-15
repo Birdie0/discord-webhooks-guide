@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "csso-cli": "^4.0.2",
-    "highlight.js": "github:highlightjs/highlight.js#10-stable",
+    "highlight.js": "github:highlightjs/highlight.js#11-stable",
     "html-minifier": "^4.0.0",
     "svgo": "~3.1.0",
     "terser": "^5.31.1"

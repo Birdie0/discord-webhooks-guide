@@ -12,8 +12,8 @@ importers:
         specifier: ^4.0.2
         version: 4.0.2
       highlight.js:
-        specifier: github:highlightjs/highlight.js#10-stable
-        version: https://codeload.github.com/highlightjs/highlight.js/tar.gz/0c4cc8a1c3aa373aee06796433c1389e4d2a3a45
+        specifier: github:highlightjs/highlight.js#11-stable
+        version: https://codeload.github.com/highlightjs/highlight.js/tar.gz/2a972d86589f65f4e79f67a02c3bf389a187afa0
       html-minifier:
         specifier: ^4.0.0
         version: 4.0.0
@@ -158,9 +158,10 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
 
-  highlight.js@https://codeload.github.com/highlightjs/highlight.js/tar.gz/0c4cc8a1c3aa373aee06796433c1389e4d2a3a45:
-    resolution: {tarball: https://codeload.github.com/highlightjs/highlight.js/tar.gz/0c4cc8a1c3aa373aee06796433c1389e4d2a3a45}
-    version: 10.7.3
+  highlight.js@https://codeload.github.com/highlightjs/highlight.js/tar.gz/2a972d86589f65f4e79f67a02c3bf389a187afa0:
+    resolution: {tarball: https://codeload.github.com/highlightjs/highlight.js/tar.gz/2a972d86589f65f4e79f67a02c3bf389a187afa0}
+    version: 11.3.1
+    engines: {node: '>=12.0.0'}
 
   html-minifier@4.0.0:
     resolution: {integrity: sha512-aoGxanpFPLg7MkIl/DDFYtb0iWz7jMFGqFhvEDZga6/4QTjneiD8I/NXL1x5aaoCp7FSIT6h/OhykDdPsbtMig==}
@@ -391,7 +392,7 @@ snapshots:
 
   he@1.2.0: {}
 
-  highlight.js@https://codeload.github.com/highlightjs/highlight.js/tar.gz/0c4cc8a1c3aa373aee06796433c1389e4d2a3a45: {}
+  highlight.js@https://codeload.github.com/highlightjs/highlight.js/tar.gz/2a972d86589f65f4e79f67a02c3bf389a187afa0: {}
 
   html-minifier@4.0.0:
     dependencies:
