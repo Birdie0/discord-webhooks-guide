@@ -33,3 +33,4 @@ payload_json={"embeds":[{"image":{"url":"attachment://pizza.jpg"}}]}
 * [HTTPie](../tools/httpie.md#sending-attachments)
 * [Insomnia](../tools/insomnia.md#sending-attachments)
 * [Postman](../tools/postman.md#sending-attachments)
+* [Python](../tools/python.md#sending-attachments)

@@ -23,7 +23,7 @@ response = httpx.post(
 response.raise_for_status()
 ```
 
-### Send a payload with attached files
+### Sending Attachments
 
 ```python
 import json
