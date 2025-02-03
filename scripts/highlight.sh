@@ -8,7 +8,7 @@
   pnpm install
 
   # generate highlight.js file
-  node tools/build.js -t browser json typescript bash powershell dos
+  node tools/build.js -t browser json typescript bash powershell dos python
 
   # return back
   cd ../..
