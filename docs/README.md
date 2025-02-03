@@ -9,6 +9,7 @@ This guide includes:
   * [Insomnia](tools/insomnia.md)
   * [curl](tools/curl.md)
   * [HTTPie](tools/httpie.md)
+  * [Python](tools/python.md)
 * Examples
 * Other things :)
 
