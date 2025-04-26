@@ -1,0 +1,97 @@
+<!doctype html><html class="rust sidebar-visible" dir=ltr lang=en><meta charset=UTF-8><title>IFTTT Platform / Filter Code - Discord Webhooks Guide</title><meta content="Comprehensive Guide about using Discord Webhooks" name=description><meta content="width=device-width,initial-scale=1" name=viewport><meta content=#ffffff name=theme-color><link href=../favicon.svg rel=icon><link href=../favicon.png rel="shortcut icon"><link href=../css/variables.css rel=stylesheet><link href=../css/general.css rel=stylesheet><link href=../css/chrome.css rel=stylesheet><link href=../css/print.css rel=stylesheet media=print><link href=../FontAwesome/css/font-awesome.css rel=stylesheet><link href=../fonts/fonts.css rel=stylesheet><link href=../highlight.css rel=stylesheet id=highlight-css><link href=../tomorrow-night.css rel=stylesheet id=tomorrow-night-css><link href=../ayu-highlight.css rel=stylesheet id=ayu-highlight-css><script>let path_to_root="../",default_light_theme="rust",default_dark_theme="ayu"</script><script src=../toc.js></script><div id=body-container><script>try{let t=localStorage.getItem("mdbook-theme"),e=localStorage.getItem("mdbook-sidebar");t.startsWith('"')&&t.endsWith('"')&&localStorage.setItem("mdbook-theme",t.slice(1,t.length-1)),e.startsWith('"')&&e.endsWith('"')&&localStorage.setItem("mdbook-sidebar",e.slice(1,e.length-1))}catch(t){}</script><script>let default_theme=window.matchMedia("(prefers-color-scheme: dark)").matches?default_dark_theme:default_light_theme,theme;try{theme=localStorage.getItem("mdbook-theme")}catch(e){}null==theme&&(theme=default_theme);let html=document.documentElement;html.classList.remove("rust"),html.classList.add(theme),html.classList.add("js")</script><input id=sidebar-toggle-anchor type=checkbox class=hidden><script>let sidebar=null,sidebar_toggle=document.getElementById("sidebar-toggle-anchor");if(1080<=document.body.clientWidth){try{sidebar=localStorage.getItem("mdbook-sidebar")}catch(e){}sidebar=sidebar||"visible"}else sidebar="hidden";sidebar_toggle.checked="visible"===sidebar,html.classList.remove("sidebar-visible"),html.classList.add("sidebar-"+sidebar)</script><nav aria-label="Table of contents" class=sidebar id=sidebar><mdbook-sidebar-scrollbox class=sidebar-scrollbox></mdbook-sidebar-scrollbox><noscript><iframe class=sidebar-iframe-outer src=../toc.html></iframe></noscript><div class=sidebar-resize-handle id=sidebar-resize-handle><div class=sidebar-resize-indicator></div></div></nav><div class=page-wrapper id=page-wrapper><div class=page><div id=menu-bar-hover-placeholder></div><div class="menu-bar sticky" id=menu-bar><div class=left-buttons><label aria-controls=sidebar aria-label="Toggle Table of Contents" class=icon-button for=sidebar-toggle-anchor id=sidebar-toggle title="Toggle Table of Contents"><i class="fa fa-bars"></i></label> <button class=icon-button id=theme-toggle aria-controls=theme-list aria-expanded=false aria-label="Change theme" title="Change theme" type=button aria-haspopup=true><i class="fa fa-paint-brush"></i></button><ul id=theme-list aria-label=Themes class=theme-popup role=menu><li role=none><button class=theme id=default_theme role=menuitem>Auto</button><li role=none><button class=theme id=light role=menuitem>Light</button><li role=none><button class=theme id=rust role=menuitem>Rust</button><li role=none><button class=theme id=coal role=menuitem>Coal</button><li role=none><button class=theme id=navy role=menuitem>Navy</button><li role=none><button class=theme id=ayu role=menuitem>Ayu</button></ul><button class=icon-button id=search-toggle aria-controls=searchbar aria-expanded=false aria-label="Toggle Searchbar" title="Search. (Shortkey: s)" type=button aria-keyshortcuts=S><i class="fa fa-search"></i></button></div><h1 class=menu-title>Discord Webhooks Guide</h1><div class=right-buttons><a href=../print.html aria-label="Print this book" title="Print this book"><i class="fa fa-print" id=print-button></i></a></div></div><div class=hidden id=search-wrapper><form class=searchbar-outer id=searchbar-outer><input id=searchbar type=search aria-controls=searchresults-outer aria-describedby=searchresults-header name=searchbar placeholder="Search this book ..."></form><div class="hidden searchresults-outer" id=searchresults-outer><div class=searchresults-header id=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById("sidebar-toggle").setAttribute("aria-expanded","visible"===sidebar),document.getElementById("sidebar").setAttribute("aria-hidden","visible"!==sidebar),Array.from(document.querySelectorAll("#sidebar a")).forEach(function(e){e.setAttribute("tabIndex","visible"===sidebar?0:-1)})</script><div class=content id=content><main><h1 id=ifttt-platform--filter-code><a href=#ifttt-platform--filter-code class=header>IFTTT Platform / Filter code</a></h1><p><a href=https://platform.ifttt.com/ >IFTTT Platform</a> allows you to create and publish applets, so you can share it with the others. Also it allows to put script that will execute after applet being triggered, so you can modify output data and skip actions to custom conditions, that script is called Filter code.<p>Filter code is written in TypeScript, but JavaScript code should work too. If you're relying on <a href=https://developer.mozilla.org/docs/Glossary/Type_coercion>type coercion</a> you'll need to manually convert values to right types, code window has build-in linter, it will tell what's wrong.<p>👉 <strong>Update:</strong> Before, Filter code was exclusively IFTTT Platform feature, but now it can be used on main website too (Pro subscription required).<ul><li><p><a href=https://learnxinyminutes.com/docs/javascript/ >JavaScript tutorial</a><li><p><a href=https://learnxinyminutes.com/docs/typescript/ >TypeScript tutorial</a><li><p><a href=https://platform.ifttt.com/docs/applets>IFTTT Platform Documentation</a><li><p><a href=https://ifttt.com/explore/filter-code-cheat-sheet>IFTTT Filter code cheat sheet</a></ul><h2 id=example><a href=#example class=header>Example</a></h2><pre><code class=language-ts>// Building JSON body
+const body = {
+  embeds: [{
+    author: {
+      name: Trigger.UserName, // equals {{UserName}}
+      url: Trigger.LinkToTweet // equals {{LinkToTweet}}
+    },
+    description: `*${Trigger.Text}*`, // equals *{{Text}}*
+    color: 0x1da1f2, // equals 1942002 (hex ➤ decimal value)
+    timestamp: Meta.triggerTime // equals moment.js object but during JSON encoding will be turned to YYYY-MM-DDThh:mm:ss.msZ (discord compatible timestamp)
+  }]
+};
+
+// If you want to manually skip some triggers when some of ingredients match/not match something or allow to run only at certain time you can do this:
+if (Trigger.Text.indexOf('skip') > 0) {
+  MakerWebhooks.makeWebRequest.skip('this reason will appear in activity logs!');
+}
+
+// This action makes Web Request and sends webhook
+MakerWebhooks.makeWebRequest.setBody(JSON.stringify(body));
+// Done!
+</code></pre><h3 id=tsjs-cheat-sheet><a href=#tsjs-cheat-sheet class=header>TS/JS cheat sheet</a></h3><pre><code class=language-ts>//== in ts/js quotes around keys can be omitted
+let body = {"content": "text"};
+// equals
+let body = {content: "text"};
+
+//== the difference between single and double quotes that you need to escape it between them own
+let text = ['what\'s up?', "*\"winks\"*"];
+// equals
+let text = ["what's up?", '*"winks"*'];
+
+//== if you want to add value inside string use *template literals*: ` ` with ${}
+let message = 'hello, ' + name + '!';
+// equals
+let message = `hello, ${name}!`;
+
+//== if variable is a string there's no need to use template literals
+let zzz = `${ccc}`;
+// equals
+let zzz = ccc; // if variable is not string but it should be call ccc.toString() on it!
+
+//== var/let/const
+// if value might be reassigned, use let
+let favoriteNumber = 42
+// otherwise use const
+const name = 'John'
+// using var is ok too, but less preferable
+var happy = true
+
+//== check if string includes substring
+let str = 'The quick brown fox jumps over the lazy dog';
+let substr = 'fox';
+let substr2 = 'cat';
+let result = str.indexOf(substr) > -1; // equals true
+let result2 = str.indexOf(substr2) > -1; // equals false
+// explanation: IFTTT doesn't have str.includes(substr) method available
+// so we have to use str.indexOf(substr) > -1 instead,
+// which returns coordinates of substring and -1 if not found.
+// > -1 is in range [0..+inf), >= 0 will work the same way
+
+//== random value
+let random = Math.random(); // returns float value in range [0..1) (1 excluded)
+let random2 = Math.round(Math.random()); // returns 0 or 1
+let random3 = Math.floor(Math.random() * 10); // returns integer value in range [0..9] (10 excluded)
+let random4 = 5 + Math.floor(Math.random() * 45); // returns integer value in range [5..49] (50 excluded)
+
+//== random element in array
+let arr = ['one', 'two', 'three', 'four'];
+let picked = arr[Math.floor(Math.random() * arr.length)];
+</code></pre><h3 id=useful-snippets><a href=#useful-snippets class=header>Useful snippets</a></h3><pre><code class=language-ts>// check if str is part of substr, optionally comparing them case-insensitively
+function includes(str: string, substr: string, caseInsensitive?: boolean): boolean {
+  if (caseInsensitive) {
+    str = str.toLowerCase();
+    substr = substr.toLowerCase();
+  }
+  return str.indexOf(substr) > -1;
+}
+
+includes('watermelon', 'melon') // returns true
+includes('Watermelon', 'Melon') // returns false
+includes('Watermelon', 'Melon', true) // returns true
+
+// random integer number between min and max
+function random(min: number, max: number): number {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+random(5, 10) // returns value between 5 and 10
+random(-5, 5) // returns value between -5 and 5
+
+// select random element of array
+function pick&lt;T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+pick(['apple', 'banana', 'orange'])
+</code></pre></main><nav aria-label="Page navigation" class=nav-wrapper><a href=../services/ifttt.html class="mobile-nav-chapters previous" aria-keyshortcuts=Left aria-label="Previous chapter" rel=prev title="Previous chapter"><i class="fa fa-angle-left"></i> </a><a href=../tools/postman.html class="mobile-nav-chapters next" aria-keyshortcuts=Right aria-label="Next chapter" rel="next prefetch" title="Next chapter"><i class="fa fa-angle-right"></i></a><div style=clear:both></div></nav></div></div><nav aria-label="Page navigation" class=nav-wide-wrapper><a href=../services/ifttt.html class="nav-chapters previous" aria-keyshortcuts=Left aria-label="Previous chapter" rel=prev title="Previous chapter"><i class="fa fa-angle-left"></i> </a><a href=../tools/postman.html class="nav-chapters next" aria-keyshortcuts=Right aria-label="Next chapter" rel="next prefetch" title="Next chapter"><i class="fa fa-angle-right"></i></a></nav></div><script>window.playground_copyable=!0</script><script src=../elasticlunr.min.js></script><script src=../mark.min.js></script><script src=../searcher.js></script><script src=../clipboard.min.js></script><script src=../highlight.js></script><script src=../book.js></script></div>

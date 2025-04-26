@@ -1,0 +1,661 @@
+<!doctype html><html class="rust sidebar-visible" dir=ltr lang=en><meta charset=UTF-8><title>Discord Webhooks Guide</title><meta content=noindex name=robots><meta content="Comprehensive Guide about using Discord Webhooks" name=description><meta content="width=device-width,initial-scale=1" name=viewport><meta content=#ffffff name=theme-color><link href=favicon.svg rel=icon><link href=favicon.png rel="shortcut icon"><link href=css/variables.css rel=stylesheet><link href=css/general.css rel=stylesheet><link href=css/chrome.css rel=stylesheet><link href=css/print.css rel=stylesheet media=print><link href=FontAwesome/css/font-awesome.css rel=stylesheet><link href=fonts/fonts.css rel=stylesheet><link href=highlight.css rel=stylesheet id=highlight-css><link href=tomorrow-night.css rel=stylesheet id=tomorrow-night-css><link href=ayu-highlight.css rel=stylesheet id=ayu-highlight-css><script>let path_to_root="",default_light_theme="rust",default_dark_theme="ayu"</script><script src=toc.js></script><div id=body-container><script>try{let t=localStorage.getItem("mdbook-theme"),e=localStorage.getItem("mdbook-sidebar");t.startsWith('"')&&t.endsWith('"')&&localStorage.setItem("mdbook-theme",t.slice(1,t.length-1)),e.startsWith('"')&&e.endsWith('"')&&localStorage.setItem("mdbook-sidebar",e.slice(1,e.length-1))}catch(t){}</script><script>let default_theme=window.matchMedia("(prefers-color-scheme: dark)").matches?default_dark_theme:default_light_theme,theme;try{theme=localStorage.getItem("mdbook-theme")}catch(e){}null==theme&&(theme=default_theme);let html=document.documentElement;html.classList.remove("rust"),html.classList.add(theme),html.classList.add("js")</script><input id=sidebar-toggle-anchor type=checkbox class=hidden><script>let sidebar=null,sidebar_toggle=document.getElementById("sidebar-toggle-anchor");if(1080<=document.body.clientWidth){try{sidebar=localStorage.getItem("mdbook-sidebar")}catch(e){}sidebar=sidebar||"visible"}else sidebar="hidden";sidebar_toggle.checked="visible"===sidebar,html.classList.remove("sidebar-visible"),html.classList.add("sidebar-"+sidebar)</script><nav aria-label="Table of contents" class=sidebar id=sidebar><mdbook-sidebar-scrollbox class=sidebar-scrollbox></mdbook-sidebar-scrollbox><noscript><iframe class=sidebar-iframe-outer src=toc.html></iframe></noscript><div class=sidebar-resize-handle id=sidebar-resize-handle><div class=sidebar-resize-indicator></div></div></nav><div class=page-wrapper id=page-wrapper><div class=page><div id=menu-bar-hover-placeholder></div><div class="menu-bar sticky" id=menu-bar><div class=left-buttons><label aria-controls=sidebar aria-label="Toggle Table of Contents" class=icon-button for=sidebar-toggle-anchor id=sidebar-toggle title="Toggle Table of Contents"><i class="fa fa-bars"></i></label> <button class=icon-button id=theme-toggle aria-controls=theme-list aria-expanded=false aria-label="Change theme" title="Change theme" type=button aria-haspopup=true><i class="fa fa-paint-brush"></i></button><ul id=theme-list aria-label=Themes class=theme-popup role=menu><li role=none><button class=theme id=default_theme role=menuitem>Auto</button><li role=none><button class=theme id=light role=menuitem>Light</button><li role=none><button class=theme id=rust role=menuitem>Rust</button><li role=none><button class=theme id=coal role=menuitem>Coal</button><li role=none><button class=theme id=navy role=menuitem>Navy</button><li role=none><button class=theme id=ayu role=menuitem>Ayu</button></ul><button class=icon-button id=search-toggle aria-controls=searchbar aria-expanded=false aria-label="Toggle Searchbar" title="Search. (Shortkey: s)" type=button aria-keyshortcuts=S><i class="fa fa-search"></i></button></div><h1 class=menu-title>Discord Webhooks Guide</h1><div class=right-buttons><a href=print.html aria-label="Print this book" title="Print this book"><i class="fa fa-print" id=print-button></i></a></div></div><div class=hidden id=search-wrapper><form class=searchbar-outer id=searchbar-outer><input id=searchbar type=search aria-controls=searchresults-outer aria-describedby=searchresults-header name=searchbar placeholder="Search this book ..."></form><div class="hidden searchresults-outer" id=searchresults-outer><div class=searchresults-header id=searchresults-header></div><ul id=searchresults></ul></div></div><script>document.getElementById("sidebar-toggle").setAttribute("aria-expanded","visible"===sidebar),document.getElementById("sidebar").setAttribute("aria-hidden","visible"!==sidebar),Array.from(document.querySelectorAll("#sidebar a")).forEach(function(e){e.setAttribute("tabIndex","visible"===sidebar?0:-1)})</script><div class=content id=content><main><h1 id=discord-webhooks-guide><a href=#discord-webhooks-guide class=header>Discord Webhooks Guide</a></h1><p>This guide includes:<ul><li>Structure of Discord Webhook<li>How to send Webhooks with<ul><li><a href=services/ifttt.html>IFTTT</a> and <a href=services/ifttt_platform.html>IFTTT Platform</a><li><a href=tools/postman.html>Postman</a><li><a href=tools/insomnia.html>Insomnia</a><li><a href=tools/curl.html>curl</a><li><a href=tools/httpie.html>HTTPie</a><li><a href=tools/python.html>Python</a></ul><li>Examples<li>Other things :)</ul><h2 id=translations><a href=#translations class=header>Translations</a></h2><ul><li><a href=https://darkpro1337.github.io/discord-webhooks/ >Russian translation by DarkPro1337#4304</a></ul><div style=break-before:page;page-break-before:always></div><h1 id=json><a href=#json class=header>JSON</a></h1><p>If you do not know anything about JSON, please, spend some time on learning JSON structure.<h2 id=what-is-json><a href=#what-is-json class=header><code>What is JSON?</code></a></h2><p><strong>JSON</strong> stands for<ul><li><strong>J</strong>ava<li><strong>S</strong>cript<li><strong>O</strong>bject<li><strong>N</strong>otation</ul><p>N.B. Don't be scared. JSON is easy to learn and use! This is not a programming language!!!<p>JSON is data-storing format that easy to read and write for humans and robots.<ul><li><code>key: value</code> - this is key-value pair.<li>Key and value are separated with semicolon (<code>:</code>), no exceptions.<li>Multiple key-values are separated with comma (<code>,</code>), no exceptions.<li>Spaces and line breaks are ok till they not the part of key or value.<li>The <code>key</code> is always text inserted between double quotes (<code>" "</code>).<li>But <code>value</code> can be different types:<ul><li><strong>string</strong> - <code>"sample text"</code>, <code>"cool\nthings"</code><li><strong>number</strong> - <code>42</code>, <code>-300</code>, <code>6.62e-34</code><li><strong>object</strong> - <code>{ "name": "Jason", "likes": ["apples", "oranges"] }</code><li><strong>array</strong> - <code>["apple", "banana", "orange"]</code>, <code>[1, true, 3, "meow"]</code><li><strong>boolean</strong> - <code>true</code>, <code>false</code><li><strong>null</strong> - <code>null</code></ul></ul><h3 id=about-strings><a href=#about-strings class=header>About strings</a></h3><p>Strings can store any characters you want, but some of them need to be escaped:<ul><li><strong>double quote</strong> - <code>\"</code><li><strong>slash</strong> - <code>\\</code><li><strong>backslash</strong> - <code>\/</code> (escaping is optional)<li><strong>newline</strong> - <code>\n</code> (use this if you want to add newline to value)<li><strong>carriage return</strong> - <code>\r</code><li><strong>horizontal tab</strong> - <code>\t</code><li><strong>backspace</strong> - <code>\b</code><li><strong>form feed</strong> - <code>\f</code><li><strong>unicode character</strong> - <code>\uxxxx</code></ul><h3 id=example><a href=#example class=header>Example</a></h3><pre><code class=language-json>{
+  "name": "Pumpkin",
+  "age": 7,
+  "likes": [
+    "patting",
+    "sleeping in a garden",
+    "salmon"
+  ],
+  "appearance": "Orange Tabby",
+  "owner_name": "Jane Doe",
+  "phone_number": "+447712345678",
+  "address": {
+    "country": "England",
+    "city": "London",
+    "street": "Crown Street",
+    "house": 38,
+    "notes": null
+  }
+}
+</code></pre><h2 id=recommended-sources><a href=#recommended-sources class=header>Recommended sources</a></h2><ul><li><a href=https://learnxinyminutes.com/docs/json/ >Learn X in Y minutes, Where X=json</a> - quick JSON tutorial<li><a href=https://www.json.org/ >JSON official site</a> - official website that explains the format using flowcharts</ul><div style=break-before:page;page-break-before:always></div><h1 id=structure-of-webhook><a href=#structure-of-webhook class=header>Structure of Webhook</a></h1><p>Before using Webhooks you have to know the structure. All elements listed here are <em>optional</em> but request body should contain <code>content</code>, <code>embeds</code>, <code>poll</code> or attachments, otherwise request will fail.<ul><li><code>username</code> - overrides the predefined username of the webhook<li><code>avatar_url</code> - overrides the predefined avatar of the webhook<li><code>content</code> - text message, can contain up to 2000 characters<li><code>embeds</code> - array of embed objects. In comparison with bots, webhooks can have more than one custom embed<ul><li><code>color</code> - color code of the embed. You have to use Decimal numeral system, not Hexadecimal. You can use <a href=https://www.spycolor.com/ >SpyColor</a> for that. It has decimal number converter.<li><code>author</code> - embed author object<ul><li><code>name</code> - name of author<li><code>url</code> - url of author. If <code>name</code> was used, it becomes a hyperlink<li><code>icon_url</code> - url of author icon</ul><li><code>title</code> - title of embed<li><code>url</code> - url of embed. If <code>title</code> was used, it becomes hyperlink<li><code>description</code> - description text<li><code>fields</code> - array of embed field objects<ul><li><code>name</code> - name of the field<li><code>value</code> - value of the field<li><code>inline</code> - if true, fields will be displayed in the same line, 3 per line, 4th+ will be moved to the next line</ul><li><code>thumbnail</code> - embed thumbnail object<ul><li><code>url</code> - url of thumbnail</ul><li><code>image</code> - embed image object<ul><li><code>url</code> - image url</ul><li><code>footer</code> - embed footer object<ul><li><code>text</code> - footer text, doesn't support Markdown<li><code>icon_url</code> - url of footer icon</ul><li><code>timestamp</code> - ISO8601 timestamp (<code>yyyy-mm-ddThh:mm:ss.msZ</code>)</ul><li><code>poll</code> - poll object<ul><li><code>question</code> - poll question object<ul><li><code>text</code> - poll question text</ul><li><code>answers</code> - array of poll answer objects<ul><li><code>poll_media</code> - poll answer object<ul><li><code>text</code> - poll answer text<li><code>emoji</code> - emoji object (optional)<ul><li><code>id</code> - id of emoji (if custom)<li><code>name</code> - name of emoji (if built-in)</ul></ul></ul><li><code>duration</code> - duration of the poll in hours<li><code>allow_multiselect</code> - if true, allows to select multiple answers</ul><li><code>tts</code> - makes message to be spoken as with <code>/tts</code> command<li><code>allowed_mentions</code> - object allowing to control who will be mentioned by message<ul><li><code>parse</code> - array, can include next values: <code>"roles"</code>, <code>"users"</code> and <code>"everyone"</code>, depends on which decides which mentions work. If empty, none mention work.<li><code>roles</code> - array, lists ids of roles which can be mentioned with message, remove <code>"roles"</code> from <code>parse</code> when you use this one.<li><code>users</code> - array, lists ids of roles which can be mentioned with message, remove <code>"users"</code> from <code>parse</code> when you use this one.</ul></ul><h2 id=webhook-example><a href=#webhook-example class=header>Webhook example</a></h2><pre><code class=language-json>{
+  "username": "Webhook",
+  "avatar_url": "https://i.imgur.com/4M34hi2.png",
+  "content": "Text message. Up to 2000 characters.",
+  "embeds": [
+    {
+      "author": {
+        "name": "Birdie♫",
+        "url": "https://www.reddit.com/r/cats/",
+        "icon_url": "https://i.imgur.com/R66g1Pe.jpg"
+      },
+      "title": "Title",
+      "url": "https://google.com/",
+      "description": "Text message. You can use Markdown here. *Italic* **bold** __underline__ ~~strikeout~~ [hyperlink](https://google.com) `code`",
+      "color": 15258703,
+      "fields": [
+        {
+          "name": "Text",
+          "value": "More text",
+          "inline": true
+        },
+        {
+          "name": "Even more text",
+          "value": "Yup",
+          "inline": true
+        },
+        {
+          "name": "Use `\"inline\": true` parameter, if you want to display fields in the same line.",
+          "value": "okay..."
+        },
+        {
+          "name": "Thanks!",
+          "value": "You're welcome :wink:"
+        }
+      ],
+      "thumbnail": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/3/38/4-Nature-Wallpapers-2014-1_ukaavUI.jpg"
+      },
+      "image": {
+        "url": "https://upload.wikimedia.org/wikipedia/commons/5/5a/A_picture_from_China_every_day_108.jpg"
+      },
+      "footer": {
+        "text": "Woah! So cool! :smirk:",
+        "icon_url": "https://i.imgur.com/fKL31aD.jpg"
+      }
+    }
+  ]
+}
+</code></pre><h2 id=and-how-it-looks><a href=#and-how-it-looks class=header>And how it looks</a></h2><p><img alt="webhook result example" src=img/webhook_example.png><div style=break-before:page;page-break-before:always></div><h1 id=username><a href=#username class=header>username</a></h1><p>Overrides webhook's username. Useful, if you're using the same Webhook URL for several things.<p>Example:<pre><code class=language-json>{
+  "username": "Cat",
+  "content": "Hello!"
+}
+</code></pre><p><img alt="username example" src=structure/../img/structure/username.png><div style=break-before:page;page-break-before:always></div><h1 id=avatar_url><a href=#avatar_url class=header>avatar_url</a></h1><p>Overrides webhook's avatar. Useful, if you're using the same Webhook URL for several things.<p>Example:<pre><code class=language-json>{
+  "avatar_url": "https://i.imgur.com/oBPXx0D.png",
+  "content": "Woof-woof!"
+}
+</code></pre><p><img alt="avatar url example" src=structure/../img/structure/avatar_url.png><div style=break-before:page;page-break-before:always></div><h1 id=content><a href=#content class=header>content</a></h1><p>Sets content for message sent by webhook.<p>Example:<pre><code class=language-json>{
+  "content": "*reads manual*"
+}
+</code></pre><p><img alt="content example" src=structure/../img/structure/content.png><div style=break-before:page;page-break-before:always></div><h1 id=embeds><a href=#embeds class=header>embeds</a></h1><p>Sets custom embeds for message sent by webhook. <code>embeds</code> is an array of embeds and can contain up to 10 embeds in the same message.<p>Examples:<pre><code class=language-json>{
+  "embeds": [{
+    "title": "Hello!",
+    "description": "Hi! :grinning:"
+  }]
+}
+</code></pre><p><img alt="embeds example" src=structure/../img/structure/embeds.png><pre><code class=language-json>{
+  "embeds": [
+    {
+      "title": "Meow!",
+      "color": 1127128
+    },
+    {
+      "title": "Meow-meow!",
+      "color": 14177041
+    }
+  ]
+}
+</code></pre><p><img alt="embeds example" src=structure/../img/structure/embeds_2.png><h2 id=ps><a href=#ps class=header>P.S.</a></h2><p>Adding embeds overrides url embeds.<div style=break-before:page;page-break-before:always></div><h1 id=color><a href=#color class=header>color</a></h1><p>Sets color for webhook's embed. It equals 0 (transparent) by default. Color requires number instead hex code, so you have to convert hexadecimal color code to decimal number. Color can be defined as number <code>65280</code> and as string <code>"65280"</code>.<p>I recommend to use <a href=https://www.spycolor.com/ >SpyColor</a> for color picking, it provides decimal value.<p>Example:<pre><code class=language-json>{
+  "embeds": [
+    {
+      "title": "Meow!",
+      "color": 1127128
+    },
+    {
+      "title": "Meow-meow!",
+      "color": "14177041"
+    }
+  ]
+}
+</code></pre><p><img alt="color example" src=structure/embed/../../img/structure/embed/color.png><div style=break-before:page;page-break-before:always></div><h1 id=author><a href=#author class=header>author</a></h1><p>Adds Author block to embed. <code>author</code> is an object which includes three values:<ul><li><code>name</code> - sets name.<li><code>url</code> - sets link. Requires <code>name</code> value. If used, transforms <code>name</code> into hyperlink.<li><code>icon_url</code> - sets avatar. Requires <code>name</code> value.</ul><p>Example:<pre><code class=language-json>{
+  "embeds": [{
+    "author": {
+      "name": "Delivery Girl",
+      "url": "https://www.reddit.com/r/Pizza/",
+      "icon_url": "https://i.imgur.com/V8ZjaMa.jpg"
+    },
+    "description": "Your pizza is ready!\n:timer:ETA: 10 minutes."
+  }]
+}
+</code></pre><p><img alt="author example" src=structure/embed/../../img/structure/embed/author.png><div style=break-before:page;page-break-before:always></div><h1 id=title><a href=#title class=header>title</a></h1><p>Sets title for webhook's embed.<p>Example:<pre><code class=language-json>{
+  "embeds": [{
+    "title": "Meow!"
+  }]
+}
+</code></pre><p><img alt="title example" src=structure/embed/../../img/structure/embed/title.png><div style=break-before:page;page-break-before:always></div><h1 id=url><a href=#url class=header>url</a></h1><p>Sets link for title in your webhook message. Requires <code>title</code> variable and turns it into hyperlink.<p>Example:<pre><code class=language-json>{
+  "embeds": [{
+    "title": "Google it!",
+    "url": "https://google.com/"
+  }]
+}
+</code></pre><p><img alt="url example" src=structure/embed/../../img/structure/embed/url.png><div style=break-before:page;page-break-before:always></div><h1 id=description><a href=#description class=header>description</a></h1><p>Sets description for webhook's embed.<p>Example:<pre><code class=language-json>{
+  "embeds": [{
+    "description": "*Hi!* **Wow!** I can __use__ hyperlinks [here](https://discord.com)."
+  }]
+}
+</code></pre><p><img alt="description example" src=structure/embed/../../img/structure/embed/description.png><div style=break-before:page;page-break-before:always></div><h1 id=fields><a href=#fields class=header>fields</a></h1><p>Allows you to use multiple <code>title + description</code> blocks in embed. <code>fields</code> is an array of <code>field</code> objects. Each object includes three values:<ul><li><code>name</code> - sets name for field object. Required;<li><code>value</code> - sets description for field object. Required;<li><code>inline</code> - if <code>true</code> then sets field objects in same line, <strong>but</strong> if you have more than 3 objects with enabled <code>inline</code> or just too long you will get rows with 3 fields in each one or with 2 fields if you used <code>thumbnail</code> object. <code>false</code> by default. Optional.</ul><p>P.S. You can use up to 25 fields in same embed. <code>name</code> and <code>value</code> support <a href=structure/embed//markdown.html>Discord Markdown</a>.<p>Example:<pre><code class=language-json>{
+  "embeds": [{
+    "fields": [
+      {
+        "name": "Cat",
+        "value": "Hi! :wave:",
+        "inline": true
+      },
+      {
+        "name": "Dog",
+        "value": "hello!",
+        "inline": true
+      },
+      {
+        "name": "Cat",
+        "value": "wanna play? join to voice channel!"
+      },
+      {
+        "name": "Dog",
+        "value": "yay"
+      }
+    ]
+  }]
+}
+</code></pre><p><img alt="fields example" src=structure/embed/../../img/structure/embed/fields.png><div style=break-before:page;page-break-before:always></div><h1 id=image><a href=#image class=header>image</a></h1><p>Allows you to add image to the embed. Currently, there is no way to set width/height of the image. <code>url</code> value must be valid url that starts with <code>http(s)://</code> or <code>attachment://</code>, more info about the latter one can be found on the <a href=structure/embed/../file.html#embedding-attachments>file</a> page.<p>Example:<pre><code class=language-json>{
+  "embeds": [{
+    "image": {
+      "url": "https://i.imgur.com/ZGPxFN2.jpg"
+    }
+  }]
+}
+</code></pre><p><img alt=image src=structure/embed/../../img/structure/embed/image.png><div style=break-before:page;page-break-before:always></div><h1 id=thumbnail><a href=#thumbnail class=header>thumbnail</a></h1><p>Allows you to add thumbnail to the embed. Currently, there is no way to set width/height of the thumbnail. <code>url</code> value must be valid url that starts with <code>http(s)://</code> or <code>attachment://</code>, more info about the latter one can be found on the <a href=structure/embed/../file.html#embedding-attachments>file</a> page.<p>Example:<pre><code class=language-json>{
+  "embeds": [{
+    "thumbnail": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/38/4-Nature-Wallpapers-2014-1_ukaavUI.jpg"
+    }
+  }]
+}
+</code></pre><p><img alt="thumbnail example" src=structure/embed/../../img/structure/embed/thumbnail.png><div style=break-before:page;page-break-before:always></div><h1 id=footer><a href=#footer class=header>footer</a></h1><p>Allows you to add footer to embed. <code>footer</code> is an object which includes two values:<ul><li><code>text</code> - sets name for author object. Markdown is disabled here!!!<li><code>icon_url</code> - sets icon for author object. Requires <code>text</code> value.</ul><p>Example:<pre><code class=language-json>{
+  "embeds": [{
+      "footer": {
+        "text": "Woah! *So cool!* :smirk:",
+        "icon_url": "https://i.imgur.com/fKL31aD.jpg"
+      },
+      "description": "Your pizza is ready!\n:timer:ETA: 10 minutes."
+  }]
+}
+</code></pre><p><img alt="footer example" src=structure/embed/../../img/structure/embed/footer.png><div style=break-before:page;page-break-before:always></div><h1 id=timestamp><a href=#timestamp class=header>timestamp</a></h1><p>Allows you to add <code>timestamp</code> to embed. Time stores as String in the next format: <code>"YYYY-MM-DDTHH:MM:SS.MSSZ"</code>. If <code>footer</code> was used they will be separated with a bullet (•). Also, this is special field, because it can show different time based on user's device.<p>P.S. Timestamp is not just text. This is formatted UTC time and date. It will show different time because timezones. Look on example below: I set 12pm but it shows 2pm because UTC+2 timezone.<p>Example:<pre><code class=language-json>{
+  "embeds": [{
+    "description": "Time travel!",
+    "timestamp": "2015-12-31T12:00:00.000Z"
+  }]
+}
+</code></pre><p><img alt="timestamp example" src=structure/embed/../../img/structure/embed/timestamp.png><div style=break-before:page;page-break-before:always></div><h1 id=poll><a href=#poll class=header>poll</a></h1><p>Allows to add poll to message. Poll always has a question (up to 300 characters) with at least 1 answer (up to 10 options total, up to 55 characters per each). Poll duration can be set to value between 1 and 768 hours (32 days), if omitted 24 hours are assumed. Additionally, multiple answers mode is available, but there's no way to limit how many can be selected at time when it's enabled.<p>Structure can be a bit confusing at first, let's break it down:<ul><li><code>poll</code> - poll object<ul><li><code>question</code> - poll question object<ul><li><code>text</code> - poll question text value, up to 300 characters</ul><li><code>answers</code> - array of poll answer objects, up to 10 options can be specified, at least 1 is required<ul><li><code>poll_media</code> - poll answer object<ul><li><code>text</code> - poll answer text<li><code>emoji</code> - emoji object, optional<ul><li><code>id</code> - id of emoji, should be provided as string, used when emoji is custom<li><code>name</code> - name of emoji, should be written as Unicode character, used when emoji is built-in</ul></ul></ul><li><code>duration</code> - duration of the poll in hours (1-768), default is 24 hours<li><code>allow_multiselect</code> - if true, allows to select multiple answers, optional, default is false</ul></ul><p>Example:<pre><code class=language-json>{
+  "poll": {
+    "question": {
+      "text": "Cat person or dog person?"
+    },
+    "answers": [
+      {
+        "poll_media": {
+          "text": "meow!",
+          "emoji": {
+            "id": "1365720705324421202"
+          }
+        }
+      },
+      {
+        "poll_media": {
+          "text": "woof!",
+          "emoji": {
+            "name": "🐶"
+          }
+        }
+      }
+    ],
+    "allow_multiselect": true,
+    "duration": 48
+  }
+}
+</code></pre><p><img alt="poll example" src=structure/../img/structure/poll.png><h2 id=additional-information><a href=#additional-information class=header>Additional information</a></h2><p>By adding <code>wait=true</code> to the request query, you can get a response with the message structure, that will include all kind of data about message, including Message ID. Later on it can be used to get poll results using <a href=https://discord.com/developers/docs/resources/webhook#get-webhook-message>Get Webhook Message</a> request, it allows to see number of votes, but not voters. Additionally there's no way to close poll as it's possible for users and bots (both can only close own polls only).<p><a href=https://discord.com/developers/docs/resources/poll#poll-create-request-object>Discord API reference</a><div style=break-before:page;page-break-before:always></div><h1 id=tts><a href=#tts class=header>tts</a></h1><p>Enables text-to-speech for current message, so everyone who have tts enabled with hear it.<p>Example:<pre><code class=language-json>{
+  "content": "Hi",
+  "tts": true
+}
+</code></pre><div style=break-before:page;page-break-before:always></div><h1 id=allowed_mentions><a href=#allowed_mentions class=header>allowed_mentions</a></h1><p>Allows to suppress pings by users, roles or everyone/here mentions. <code>allowed_mentions</code> object and can contain next parameters:<ul><li><code>parse</code> - array and can include next values:<ul><li>"everyone" - if present everyone/here will ping.<li>"users" - if present user mentions will ping.<li>"roles" - if present role mentions will ping.</ul><li><code>users</code> - array with id of users, allows to limit which users may be pinged.<li><code>roles</code> - array with id of roles, allows to limit which roles may be pinged.</ul><p>Don't include <code>users</code> and <code>roles</code> both in <code>allowed_mentions</code> and <code>parse</code>, , if you want<p>Here's some examples:<ul><li><p>nobody will be pinged by this message.<pre><code class=language-json>{
+  "content": "@everyone &lt;@&role-id> &lt;@user-id>",
+  "allowed_mentions": { "parse": [] }
+}
+</code></pre><li><p>only users that didn't suppress everyone/here mentions will be pinged.<pre><code class=language-json>{
+  "content": "@everyone &lt;@&role-id> &lt;@user-id>",
+  "allowed_mentions": { "parse": ["everyone"] }
+}
+</code></pre><li><p>only user with <code>user-id</code> will be pinged, in this case <code>@everyone</code> won't ping anyone. <code>user2</code> mention is not in content so no ping for them.<pre><code class=language-json>{
+  "content": "@everyone &lt;@&role-id> &lt;@user-id>",
+  "allowed_mentions": { "users": ["user-id", "user2-id"]  }
+}
+</code></pre><li><p>similar for roles.<pre><code class=language-json>{
+  "content": "@everyone &lt;@&role-id> &lt;@user-id>",
+  "allowed_mentions": { "roles": ["role-id"] }
+}
+</code></pre><li><p>Will ping everyone with disabled everyone/here mention suppress, all users mentioned in message (i. e. <code>user-id</code> user) or with <code>role-id</code> role (unless enabled role mention suppress).<pre><code class=language-json>{
+  "content": "@everyone &lt;@&role-id> &lt;@user-id>",
+  "allowed_mentions": {
+    "parse": ["everyone", "users"],
+    "roles": ["role-id"]
+  }
+}
+</code></pre></ul><p><a href=https://discord.com/developers/docs/resources/channel#allowed-mentions-object>Discord API reference</a><div style=break-before:page;page-break-before:always></div><h1 id=file><a href=#file class=header>file</a></h1><p>Sending files using webhooks is only possible using <code>Content-Type: multipart/form-data</code> header. Using this method also means you have to set json body as value of <code>payload_json</code> parameter.<p>Parameter names should have unique names otherwise they will collide and only first file from ones with identical names will be shown.<p>Example:<pre><code class=language-sh>file1=@cat.jpg
+file2=@dog.jpg
+payload_json={"embeds":[{"title":"test"}]}
+</code></pre><p><img alt="result example" src=structure/../img/structure/file.png><h2 id=embedding-attachments><a href=#embedding-attachments class=header>Embedding attachments</a></h2><p>To put image attachment inside embed use <code>attachment://</code> with its filename (not field name). That will also hide attachment from the message.<pre><code class=language-sh>file1=@pizza.jpg
+payload_json={"embeds":[{"image":{"url":"attachment://pizza.jpg"}}]}
+</code></pre><p><img alt="result example" src=structure/../img/structure/file_2.png><h2 id=how-to-send-attachments-using-various-tools-explained-on-respective-pages><a href=#how-to-send-attachments-using-various-tools-explained-on-respective-pages class=header>How to send attachments using various tools explained on respective pages:</a></h2><ul><li><a href=structure/../tools/curl.html#sending-attachments>curl</a><li><a href=structure/../tools/httpie.html#sending-attachments>HTTPie</a><li><a href=structure/../tools/insomnia.html#sending-attachments>Insomnia</a><li><a href=structure/../tools/postman.html#sending-attachments>Postman</a><li><a href=structure/../tools/python.html#sending-attachments>Python</a></ul><div style=break-before:page;page-break-before:always></div><h1 id=ifttt><a href=#ifttt class=header>IFTTT</a></h1><p>IFTTT is a very awesome service for connecting services. It supports Webhooks, so we can use it with Discord.<h2 id=create-an-account-on-ifttt><a href=#create-an-account-on-ifttt class=header>Create an Account on IFTTT</a></h2><p>Visit <a href=https://ifttt.com/ >IFTTT</a> and create yourself an account (if you don't have one yet).<h2 id=create-webhook-on-discord><a href=#create-webhook-on-discord class=header>Create Webhook on Discord</a></h2><ol><li>Go to <strong>Server or Channel settings</strong> ➤ <strong>Integrations</strong> ➤ <strong>Webhooks</strong> ➤ <strong>Create Webhook</strong> or <strong>Click on existing one</strong> if you created one already.<li>Setup name, avatar and the channel in which webhook messages will be sent. When ready, click <strong>Save Changes</strong> and <strong>Copy Webhook URL</strong>.</ol><p><strong>⚠️ Attention! Keep URL safe, don't share them with people you don't trust, don't post it in public channels, don't give your server mods Administrator or Manage Webhooks permission as it gives access to them as well. Webhooks are quite powerful and can cause some troubles, which including, but not limited to, @everyone/@here mentions (webhooks ignore channel permissions), message/image spam (webhooks have max 5 requests in 2 seconds window rate limit, but still it's 150 requests per minute) and requests can't be traced, so finding the guilty is pretty much impossible, so you're warned I guess... If something like this happen, remove webhook causing problems and it won't be able to send messages anymore.</strong><h2 id=creating-an-applet><a href=#creating-an-applet class=header>Creating an Applet</a></h2><h3 id=if-this><a href=#if-this class=header>If <code>this</code></a></h3><ol><li>Go to <a href=https://ifttt.com/ ><strong>IFTTT website</strong></a> ➤ click <strong>Create</strong> ➤ <a href=https://ifttt.com/create><strong>Applets</strong></a>.<li>Click <code>[+]this</code>.<li>Choose a service you want accept updates/feeds from, use search to find it faster.<li>If you connect service in the first time it may ask you to authorize, just follow the steps.<li>Most of services have multiple triggers. Choose the one that fits your needs.<li>Fill the fields. Here can be more than one step. Read the descriptions and examples.</ol><h3 id=then-that><a href=#then-that class=header>Then <code>that</code></a></h3><ol><li>Click <code>[+]that</code><li>Search for <strong>Webhooks</strong> with the search bar.<li>Choose <strong>Make a web request</strong> as action.<li>Paste the <strong>Webhook URL</strong> in <strong>URL</strong> field.<li>Select <strong>POST</strong> as <strong>Method</strong>.<li>Select <strong>application/json</strong> as <strong>Content Type</strong>.<li><strong>Body</strong> is the main part. there's couple of things you have to know:</ol><ul><li>Neither IFTTT nor Discord build the result message, you're the one responsible for it.<li>Request body is written in JSON, if you have no idea what it is, please check <a href=services/../json.html>JSON</a> reference page first, then structure pages.<li>All available Ingredients are listed under <strong>Add Ingredient</strong> dropdown menu. If something Ingredient not listed means you can't use it and it will cause error on proceeding. Also, make sure you put spaces between <code>{{</code> <code>}}</code> which are not part of Ingredient, like here: <code>{"embeds": [{"image": {"url": "{{ImageUrl}}"}}]}</code> ➤ <code>{"embeds": [{"image": {"url": "{{ImageUrl}}"} }]}</code> otherwise they may be assumed as end of Ingredient name and break the validation.<li>Due to certain specifics of JSON format the Ingredients IFTTT provides may break the request. Because that escaping Ingredients is highly recommended! To escape Ingredient, add <code>&lt;&lt;&lt;</code> & <code>>>></code> around <code>{{Ingredient}}</code> ➤ <code>&lt;&lt;&lt;{{Ingredient}}>>></code> (website says <code>&lt;&lt;>></code>, but that a typo). Only times when escaping rule may be ignored are when Ingredient is 100% URL and when Ingredient is part of URL and that Ingredient only consists of URL-safe characters, like: <code>https://twitter.com/{{Username}}</code> (in some cases escaping these were causing broken requests).<li>You probably noticed when you post link in channel the embed appears under the link, it works in the same way with Webhooks! (adding embeds to body or adding <code>&lt;></code> around links disables that behavior though). So sometimes, instead of building complex request body <code>{"content": "{{Url}}"}</code> (Url is placeholder, it may be called differently between services) can be more than enough!<li>Always check JSON for being valid! You can use text editors with JSON support, <a href=https://leovoel.github.io/embed-visualizer/ >Embed Visualizer by leovoel</a> which was made exclusively for previewing request bodies for Discord and provides better experience in editing them (default mode is bot mode and it has difference in embeds declaring, make sure <strong>Webhook Mode</strong> is enabled!), formatting/linting websites like <a href=https://jsonformatter.org/ >JSON Formatter</a> or <a href=https://jsoneditoronline.org/ >JSON Editor Online</a>, etc. Although, this is not guarantee that request won't fail!<li>Certain fields have limit in length and content (url fields may contain only urls, otherwise request fail!), make sure you don't overflow them.</ul><ol><li>Click <strong>Create Action</strong> and then <strong>Finish</strong>.<li>Done!</ol><h3 id=troubleshooting><a href=#troubleshooting class=header>Troubleshooting</a></h3><p>If you suspect request failed, first check activity logs: <strong>Applet</strong> ➤ <strong>Settings</strong> ➤ <strong>View Activity</strong>. Ff there none errors, just messages about applet being created/updated means it wasn't triggered yet, give it some time, but if there's any please check this troubleshooting list:<ul><li><code>Action failure message: Rate limited by the remote server.</code> - means Discord rate limited this request because IFTTT sends it too frequently. Mostly happens when IFTTT tries to send requests in bulk on same webhook in short amount of time. Discord's webhook rate limit is 5 requests per 2 seconds, keep that in mind.<li><code>Unable to make web request. Your server returned a 400.</code> - means request is invalid. Can be caused by:<ul><li>wrong method verb (should be POST);<li>wrong content-type (should be application/json);<li>bad request body:<ul><li>empty, non or invalid JSON<li>resulting JSON is broken (usually caused by newlines in ingredients (json doesn't support them in values) and unicode characters (rare, but happens sometimes)), can be fixed by escaping variables with &lt;&lt;&lt;{{ingredient}} or unicode characters>>>;</ul><li>error from server saying that one of fields hit limit (sadly, but ifttt doesn't show error that came from server). Check if json data follow limits <a href=https://discord.com/developers/docs/resources/channel#embed-limits>here</a>. Try replace ingredients with data from applet logs and send it through Postman, Insomnia, other REST Client.</ul><li><code>Error 401</code> - webhook url isn't full, try to copy it again.<li><code>Error 404</code> - webhook you're using has been removed. Create new webhook and replace the old URL.<li><code>Error 405</code> - happens when you use other than POST methods.<li><code>There was a problem with the X service.</code> - and usually no data provided for this one. As it says, the problem is on service side, next check should be successful, if not - try reauthorize.</ul><h3 id=delay-checks-and-other-stuff><a href=#delay-checks-and-other-stuff class=header>Delay, checks and other stuff</a></h3><p>Some services provide close to realtime delay, some are up to 15 minutes, some even longer. Delay in applet description may be misleading and different for everyone, it's always better check by your own. Having multiple applets using same service may cause additional overall delay. Please bare with that as nothing much can be done.<p>For example for Reddit you may try RSS service as Reddit supports it too (check <a href=https://www.reddit.com/wiki/rss>this</a>), for Twitter/Instagram/etc. you may try services which convert to RSS feed.<p>IFTTT doesn't have retrospective check, means posts created before applet will be ignored. <strong>Check now</strong> button performs force check, but for some services it may work differently and don't do any check until cooldown passes.<p>Here's some services I made for own needs but I think others may find them useful too:<ul><li><a href=https://avatar.glue-bot.xyz/ >Avatar resolver</a> - some services don't provide avatars you might want be showed in webhook messages, now you can), multiple providers supported!<ul><li>usage example: <code>{"avatar_url": "https://avatar.glue-bot.xyz/twitter/{{Username}}"}</code></ul><li><a href=https://discord-ifttt.vercel.app/ >discord-ifttt</a> - use this if you keep receiving <code>Too many requests to this host</code> error, also applies rate limit so requests will less to fail, allows to use <code>text/plain</code> header, more info on the page!<li><a href=https://multi-webhook.vercel.app/ >Multi webhook</a> - for times when you want to send request to multiple webhooks using one.<ul><li>usage example: <code>URL: https://multi-webhook.vercel.app/api/multi</code>, <code>JSON: {links: [first_url, second_url], ...}</code> where first_url and second_url are webhook urls.</ul></ul><div style=break-before:page;page-break-before:always></div><h1 id=ifttt-platform--filter-code><a href=#ifttt-platform--filter-code class=header>IFTTT Platform / Filter code</a></h1><p><a href=https://platform.ifttt.com/ >IFTTT Platform</a> allows you to create and publish applets, so you can share it with the others. Also it allows to put script that will execute after applet being triggered, so you can modify output data and skip actions to custom conditions, that script is called Filter code.<p>Filter code is written in TypeScript, but JavaScript code should work too. If you're relying on <a href=https://developer.mozilla.org/docs/Glossary/Type_coercion>type coercion</a> you'll need to manually convert values to right types, code window has build-in linter, it will tell what's wrong.<p>👉 <strong>Update:</strong> Before, Filter code was exclusively IFTTT Platform feature, but now it can be used on main website too (Pro subscription required).<ul><li><p><a href=https://learnxinyminutes.com/docs/javascript/ >JavaScript tutorial</a><li><p><a href=https://learnxinyminutes.com/docs/typescript/ >TypeScript tutorial</a><li><p><a href=https://platform.ifttt.com/docs/applets>IFTTT Platform Documentation</a><li><p><a href=https://ifttt.com/explore/filter-code-cheat-sheet>IFTTT Filter code cheat sheet</a></ul><h2 id=example-1><a href=#example-1 class=header>Example</a></h2><pre><code class=language-ts>// Building JSON body
+const body = {
+  embeds: [{
+    author: {
+      name: Trigger.UserName, // equals {{UserName}}
+      url: Trigger.LinkToTweet // equals {{LinkToTweet}}
+    },
+    description: `*${Trigger.Text}*`, // equals *{{Text}}*
+    color: 0x1da1f2, // equals 1942002 (hex ➤ decimal value)
+    timestamp: Meta.triggerTime // equals moment.js object but during JSON encoding will be turned to YYYY-MM-DDThh:mm:ss.msZ (discord compatible timestamp)
+  }]
+};
+
+// If you want to manually skip some triggers when some of ingredients match/not match something or allow to run only at certain time you can do this:
+if (Trigger.Text.indexOf('skip') > 0) {
+  MakerWebhooks.makeWebRequest.skip('this reason will appear in activity logs!');
+}
+
+// This action makes Web Request and sends webhook
+MakerWebhooks.makeWebRequest.setBody(JSON.stringify(body));
+// Done!
+</code></pre><h3 id=tsjs-cheat-sheet><a href=#tsjs-cheat-sheet class=header>TS/JS cheat sheet</a></h3><pre><code class=language-ts>//== in ts/js quotes around keys can be omitted
+let body = {"content": "text"};
+// equals
+let body = {content: "text"};
+
+//== the difference between single and double quotes that you need to escape it between them own
+let text = ['what\'s up?', "*\"winks\"*"];
+// equals
+let text = ["what's up?", '*"winks"*'];
+
+//== if you want to add value inside string use *template literals*: ` ` with ${}
+let message = 'hello, ' + name + '!';
+// equals
+let message = `hello, ${name}!`;
+
+//== if variable is a string there's no need to use template literals
+let zzz = `${ccc}`;
+// equals
+let zzz = ccc; // if variable is not string but it should be call ccc.toString() on it!
+
+//== var/let/const
+// if value might be reassigned, use let
+let favoriteNumber = 42
+// otherwise use const
+const name = 'John'
+// using var is ok too, but less preferable
+var happy = true
+
+//== check if string includes substring
+let str = 'The quick brown fox jumps over the lazy dog';
+let substr = 'fox';
+let substr2 = 'cat';
+let result = str.indexOf(substr) > -1; // equals true
+let result2 = str.indexOf(substr2) > -1; // equals false
+// explanation: IFTTT doesn't have str.includes(substr) method available
+// so we have to use str.indexOf(substr) > -1 instead,
+// which returns coordinates of substring and -1 if not found.
+// > -1 is in range [0..+inf), >= 0 will work the same way
+
+//== random value
+let random = Math.random(); // returns float value in range [0..1) (1 excluded)
+let random2 = Math.round(Math.random()); // returns 0 or 1
+let random3 = Math.floor(Math.random() * 10); // returns integer value in range [0..9] (10 excluded)
+let random4 = 5 + Math.floor(Math.random() * 45); // returns integer value in range [5..49] (50 excluded)
+
+//== random element in array
+let arr = ['one', 'two', 'three', 'four'];
+let picked = arr[Math.floor(Math.random() * arr.length)];
+</code></pre><h3 id=useful-snippets><a href=#useful-snippets class=header>Useful snippets</a></h3><pre><code class=language-ts>// check if str is part of substr, optionally comparing them case-insensitively
+function includes(str: string, substr: string, caseInsensitive?: boolean): boolean {
+  if (caseInsensitive) {
+    str = str.toLowerCase();
+    substr = substr.toLowerCase();
+  }
+  return str.indexOf(substr) > -1;
+}
+
+includes('watermelon', 'melon') // returns true
+includes('Watermelon', 'Melon') // returns false
+includes('Watermelon', 'Melon', true) // returns true
+
+// random integer number between min and max
+function random(min: number, max: number): number {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+random(5, 10) // returns value between 5 and 10
+random(-5, 5) // returns value between -5 and 5
+
+// select random element of array
+function pick&lt;T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+pick(['apple', 'banana', 'orange'])
+</code></pre><div style=break-before:page;page-break-before:always></div><h1 id=postman><a href=#postman class=header>Postman</a></h1><p><a href=https://www.postman.com/downloads/ >Postman</a> is a GUI tool for sending web requests.<p>Download it from official website. Available for Windows, Linux, and macOS.<p>Here's how to use it:<ol><li>Click <code>+</code> on the tabs panel.<li>Click on dropdown in front of URL field and choose <code>POST</code>.<li>Paste Webhook URL in URL field.<li>Click <code>Body</code> tab > <code>raw</code> > <code>JSON</code> from the dropdown.<li>Paste the body below.<li>Press <code>Send</code>.<li>If status shows <code>204 No Content</code> means request succeed!</ol><p><img alt="postman example" src=tools/../img/other/postman.png><h2 id=sending-attachments><a href=#sending-attachments class=header>Sending attachments</a></h2><p>To send attachment(s):<ol><li>Switch from <code>raw</code> to <code>form-data</code>.<li>Hover on key field, click on dropdown and choose <code>File</code>.<li>Click <code>Select Files</code> and select file (despite it allowing you to choose multiple files, choose one).<li>Repeat if you want to add more attachments.<li>To add json to request add key with <code>payload_json</code> name and json body value (dropdown must say <code>Text</code>).</ol><p><img alt="postman example" src=tools/../img/other/postman_2.png><div style=break-before:page;page-break-before:always></div><h1 id=insomnia><a href=#insomnia class=header>Insomnia</a></h1><p><a href=https://insomnia.rest/download>Insomnia</a> is a GUI tool similar to Postman for sending web requests.<p>Download it from official website. Available for Windows, Linux, and macOS.<p>Here's how to use it:<ol><li>Click <code>+</code> on the left, choose <code>New Request</code>, in dialog window press <code>Create</code>.<li>Click on dropdown in front of URL field and choose <code>POST</code>.<li>Paste Webhook URL in URL field.<li>Click <code>Body</code> dropdown, choose <code>JSON</code>.<li>Paste the body below.<li>Press <code>Send</code>.<li>If status shows <code>204 No Content</code> means request succeed!</ol><p><img alt="Insomnia example" src=tools/../img/other/insomnia.png><h2 id=sending-attachments-1><a href=#sending-attachments-1 class=header>Sending attachments</a></h2><p>To send attachment(s):<ol><li>Switch <code>Body</code> format from <code>JSON</code> to <code>Multipart Form</code>.<li>Click on arrow icon, choose <code>File</code>.<li>Click <code>Choose File</code> and select file.<li>Repeat if you want to add more attachments.<li>To add json to request add key with <code>payload_json</code> name and json body value (both <code>Text</code> and <code>Text (Multi-line)</code> are fine).</ol><p><img alt="Insomnia example" src=tools/../img/other/insomnia_2.png><div style=break-before:page;page-break-before:always></div><h1 id=curl><a href=#curl class=header>curl</a></h1><p><a href=https://curl.se/ >curl</a> - command line tool for sending web requests.<ul><li><a href=https://curl.se/windows/microsoft.html>Windows</a> - preinstalled on Windows 10+, newer version can be installed with <a href=https://scoop.sh/ >Scoop</a> or <a href=https://chocolatey.org/ >Chocolatey</a>.<li><a href=https://everything.curl.dev/install/linux.html>Linux</a> - can be installed with built-in package manager or <a href=https://brew.sh/ >Homebrew</a>.<li><a href=https://everything.curl.dev/install/macos.html>macOS</a> - preinstalled, newer version can be installed with <a href=https://brew.sh/ >Homebrew</a> or <a href=https://www.macports.org/ >MacPorts</a>.</ul><p>Also, you can download executable from their website and run it from a directory or make it discoverable through <code>PATH</code>, so it can be run from anywhere. Using a package manager is preferable as it simplifies the process of installing and updating the tool.<h2 id=usage><a href=#usage class=header>Usage</a></h2><p><code>curl -H "Content-Type: application/json" -d &lt;body> &lt;link></code><h3 id=bashzshetc><a href=#bashzshetc class=header>Bash/Zsh/etc.</a></h3><pre><code class=language-sh># Usually, request also includes `-X POST` to set request verb to POST, but using `-d` does that automatically.
+# -H "Content-Type: application/json" - adds header that tells server you're sending JSON data.
+# -d '{"username": "test", "content": "hello"}' - sets request data.
+curl -H "Content-Type: application/json" -d '{"username": "test", "content": "hello"}' "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
+
+# To make command more readable you can split it to multiple lines using backslash `\`
+# and/or set webhook url and body as variables.
+WEBHOOK_URL="https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
+BODY='{"username": "test", "content": "hello"}'
+curl \
+  -H "Content-Type: application/json" \
+  -d $BODY \
+  $WEBHOOK_URL
+</code></pre><h3 id=powershell><a href=#powershell class=header>PowerShell</a></h3><p>Note: Preinstalled PowerShell (&lt;5.1) comes with <code>curl</code> command that's actually alias to <code>Invoke-WebRequest</code> when actual curl can be accessed with <code>curl.exe</code>. This collision has been resolved in PowerShell Core 6+. If you're unsure which version you're using run this command:<pre><code class=language-ps1>$PSVersionTable.PSVersion.ToString()
+</code></pre><h4 id=51-and-below-powershellexe><a href=#51-and-below-powershellexe class=header>5.1 and below (powershell.exe)</a></h4><pre><code class=language-ps1># In older version you have to escape " with \ inside strings, so body string be parsed correctly.
+curl.exe -H "Content-Type: application/json" -d '{\"username\": \"test\", \"content\": \"hello\"}' "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
+
+# To improve rediability you can split command with `
+# and set webhook url and body to variables
+$WEBHOOK_URL = "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
+$BODY = '{\"username\": \"test\", \"content\": \"hello\"}'
+# Alternatively, we can use PowerShell hashtables with the ConvertTo-Json function
+$BODY = @{ username = "test"; content = "hello" } | ConvertTo-Json
+curl.exe `
+  -H "Content-Type: application/json" `
+  -d $BODY `
+  $WEBHOOK_URL
+</code></pre><h4 id=core--6-and-above-pwshexe><a href=#core--6-and-above-pwshexe class=header>Core / 6 and above (pwsh.exe)</a></h4><pre><code class=language-ps1>$WEBHOOK_URL = "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
+# In newer versions escaping \ with " is no longer necessary (and makes JSON invalid)
+$BODY = '{"username": "test", "content": "hello"}'
+# Alternatively, we can use PowerShell hashtables with the ConvertTo-Json function
+$BODY = @{ username = "test"; content = "hello" } | ConvertTo-Json
+curl.exe -H "Content-Type: application/json" -d $BODY $WEBHOOK_URL
+</code></pre><h3 id=command-prompt-cmdexe><a href=#command-prompt-cmdexe class=header>Command Prompt (cmd.exe)</a></h3><p>Note: Unlike PowerShell, both <code>curl</code> and <code>curl.exe</code> point to the same binary.<pre><code class=language-bat>REM ^ is multiline splitter in cmd.
+curl ^
+  -H "Content-Type: application/json" ^
+  -d "{\"username\": \"test\", \"content\": \"hello\"}" ^
+  https://discord.com/api/webhooks/123/w3bh00k_t0k3n
+
+REM Notice double quotes around body and none around link.
+SET WEBHOOK_URL=https://discord.com/api/webhooks/123/w3bh00k_t0k3n
+SET BODY="{\"username\": \"test\", \"content\":\"hello\"}"
+curl -H "Content-Type: application/json" -d %BODY% %WEBHOOK_URL%
+</code></pre><h2 id=sending-attachments-2><a href=#sending-attachments-2 class=header>Sending attachments</a></h2><pre><code class=language-sh># Adding `-H "Content-Type: multipart/form-data"` is not required as `-F` sets it automatically.
+# -F 'payload_json={}' - when sending files JSON can provided with this field.
+# -F "file1=@cat.jpg" - adds cat.jpg file as attachment.
+# -F "file2=@images/dog.jpg" - adds dog.jpg file from images directory.
+curl \
+  -F 'payload_json={"username": "test", "content": "hello"}' \
+  -F "file1=@cat.jpg" \
+  -F "file2=@images/dog.jpg" \
+  $WEBHOOK_URL
+</code></pre><div style=break-before:page;page-break-before:always></div><h1 id=httpie><a href=#httpie class=header>HTTPie</a></h1><p><a href=https://httpie.io/ >HTTPie</a> is a command line HTTP client, just like <a href=tools/curl.html>curl</a> but more user friendly.<ul><li>Windows - can be installed with <code>pip</code> (requires Python 3.x installed). By the way, this is cross-platform solution.<li>Linux - can be installed with built-in package manager or <a href=https://brew.sh/ >Homebrew</a>.<li>macOS - can be installed with <a href=https://brew.sh/ >Homebrew</a> or <a href=https://www.macports.org/ >MacPorts</a>.</ul><p>Check <a href=https://httpie.io/docs/cli/installation>docs</a> for installation details.<h2 id=usage-1><a href=#usage-1 class=header>Usage</a></h2><p><code>http &lt;url> &lt;body params></code><h3 id=for-bashzshetc><a href=#for-bashzshetc class=header>for Bash/Zsh/etc.</a></h3><pre><code class=language-sh># Optional flags and method were omitted:
+# if unspecified method is set to POST if body is specified
+# -j/--json forces JSON mode, yet it's default behavior
+http "https://discord.com/api/webhooks/123/w3bh00k_t0k3n" content="test" embeds[0][title]="text"
+</code></pre><p>Depends on type of value you have to use different separators:<ul><li><code>=</code> - text.<li><code>:=</code> - raw JSON value. Use it for array, number, boolean and nested values.<li><code>@</code> - embed file.<li><code>=@</code> - embed json file.</ul><pre><code class=language-sh>http \
+  "https://discord.com/api/webhooks/123/w3bh00k_t0k3n" \
+  content="test" \
+  embeds[0][title]="text"
+</code></pre><p>Also, if you don't want to mess with these and would like to just pass raw body, like can be done in <code>curl</code>, use the next approach:<pre><code class=language-sh>echo -n '{"content": "test", "embeds": [{"title": "text"}]}' | http "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
+</code></pre><h3 id=powershell-1><a href=#powershell-1 class=header>PowerShell</a></h3><pre><code class=language-ps1>$WEBHOOK_URL = "https://discord.com/api/webhooks/123/w3bh00k_t0k3n"
+http $WEBHOOK_URL content="test" embeds[0][title]="text"
+# Also you can just pass raw json body:
+'{"content": "test", "embeds": [{"title": "text"}]}' | http $WEBHOOK_URL
+</code></pre><h3 id=command-prompt-cmdexe-1><a href=#command-prompt-cmdexe-1 class=header>Command Prompt (cmd.exe)</a></h3><pre><code class=language-bat>REM Notice escaped double quotes around values and none around link
+SET WEBHOOK_URL=https://discord.com/api/webhooks/123/w3bh00k_t0k3n
+http %WEBHOOK_URL% content="test" embeds[0][title]="text"
+
+REM Outer quotes are skipped due to cmd parsing
+echo {"content": "test", "embeds": [{"title": "text"}]} | http %WEBHOOK_URL%
+</code></pre><h2 id=sending-attachments-3><a href=#sending-attachments-3 class=header>Sending attachments</a></h2><pre><code class=language-sh># -f flag sets "Content-Type: multipart/form-data" header.
+# payload_json='{}' - when sending files json can provided with this field.
+# file1@cat.jpg - adds cat.jpg file as attachment.
+# file2@images/dog.jpg - adds dog.jpg file from images directory.
+http -f $WEBHOOK_URL \
+  payload_json='{"content": "test", "embeds": [{"title": "text"}]}' \
+  file1@cat.jpg \
+  file2@images/dog.jpg
+</code></pre><div style=break-before:page;page-break-before:always></div><h1 id=python><a href=#python class=header>Python</a></h1><p><a href=https://python.org>Python</a> has many HTTP libraries that are able to generate webhook requests. While there's no way to list all of them, here are some examples you can try.<h2 id=httpx><a href=#httpx class=header>httpx</a></h2><p>The <a href=https://www.python-httpx.org/ >httpx</a> client library can be used to submit both simple and more complex webhooks.<h3 id=send-a-payload-as-json><a href=#send-a-payload-as-json class=header>Send a payload as json</a></h3><pre><code class=language-python>import httpx
+
+response = httpx.post(
+    "https://discord.com/api/webhooks/123/w3bh00k_t0k3n",
+    json={
+        "username": "Captain Hook",
+        "content": "Ahoy matey! I be a webhook message!",
+        # you can add embeds here, too
+    }
+)
+# raise an exception if the operation failed.
+response.raise_for_status()
+</code></pre><h3 id=sending-attachments-4><a href=#sending-attachments-4 class=header>Sending Attachments</a></h3><pre><code class=language-python>import json
+import httpx
+
+with open("image.png", "rb") as io_object:
+    response = httpx.post(
+        "https://discord.com/api/webhooks/123/w3bh00k_t0k3n",
+        data={"payload_json": json.dumps({
+            "embeds": [{
+                "title": "Hello, world!",
+                "description": "This is a message with an image",
+                "image": {"url": "attachment://filename"}
+            }]
+        })},
+        files={"filetag": ("filename", io_object, "image/png")}
+    )
+    # raise an exception if the operation failed.
+    response.raise_for_status()
+</code></pre><div style=break-before:page;page-break-before:always></div><h1 id=spotify><a href=#spotify class=header>Spotify</a></h1><h2 id=if-new-saved-track-then-make-a-web-request><a href=#if-new-saved-track-then-make-a-web-request class=header>If new saved track, then make a web request</a></h2><pre><code class=language-json>{
+  "embeds": [{
+    "color": 2021216,
+    "title": "New song added!",
+    "thumbnail": {
+      "url": "{{AlbumCoverURL}}"
+    },
+    "fields":[
+      {
+        "name": "Track",
+        "value": "[{{TrackName}}]({{TrackURL}})",
+        "inline": true
+      },
+      {
+        "name": "Artist",
+        "value": "{{ArtistName}}",
+        "inline": true
+      },
+      {
+        "name": "Album",
+        "value": "{{AlbumName}}",
+        "inline": true
+      }
+    ],
+    "footer": {
+      "text": "Added {{SavedAt}}",
+      "icon_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/200px-Spotify_logo_without_text.svg.png"
+    }
+  }]
+}
+</code></pre><p><img alt="spotify example" src=examples/../img/examples/spotify.png><div style=break-before:page;page-break-before:always></div><h1 id=twitch><a href=#twitch class=header>Twitch</a></h1><h2 id=twitch-embed><a href=#twitch-embed class=header>Twitch embed</a></h2><pre><code class=language-json>{
+  "content": "{{ChannelUrl}}"
+}
+</code></pre><p><img alt="Twitch example" src=examples/../img/examples/twitch.png><h2 id=custom-embed><a href=#custom-embed class=header>Custom embed</a></h2><p>Preview will be cached and embeds will show same image.<pre><code class=language-json>{
+  "embeds": [{
+    "color": 9520895,
+    "author": {
+      "name": "{{ChannelName}} is now streaming",
+      "url": "{{ChannelUrl}}",
+      "icon_url": "https://avatar-resolver.vercel.app/twitch/{{ChannelName}}"
+    },
+    "fields": [
+      {
+        "name": ":joystick: Game",
+        "value": "&lt;&lt;&lt;{{Game}}>>>\u200B",
+        "inline": true
+      },
+      {
+        "name": ":busts_in_silhouette: Viewers",
+        "value": "{{CurrentViewers}}",
+        "inline": true
+      }
+    ],
+    "image": { "url": "{{StreamPreview}}" }
+  }]
+}
+</code></pre><p><img alt="Twitch example" src=examples/../img/examples/twitch_custom.png><h2 id=filter-code><a href=#filter-code class=header>Filter code</a></h2><p>Fixed issue with cached preview, added game box art.<pre><code class=language-ts>const body: any = {
+  embeds: [{
+    color: 0x9146ff,
+    author: {
+      name: `${Trigger.ChannelName} is now streaming`,
+      url: Trigger.ChannelUrl,
+      icon_url: `https://avatar-resolver.vercel.app/twitch/${Trigger.ChannelName}`
+    },
+    fields: [{
+      name: ':joystick: Game',
+      value: Trigger.Game || 'No Game',
+      inline: true
+    }, {
+      name: ':busts_in_silhouette: Viewers',
+      value: Trigger.CurrentViewers,
+      inline: true
+    }],
+    thumbnail: { url: `https://avatar-resolver.vercel.app/twitch-boxart/${encodeURIComponent(Trigger.Game || '')}` },
+    image: { url: `${Trigger.StreamPreview}?${+moment()}` },
+    timestamp: Meta.triggerTime
+  }]
+};
+MakerWebhooks.makeWebRequest.setBody(JSON.stringify(body));
+</code></pre><p><img alt="Twitch example" src=examples/../img/examples/twitch_filter_code.png><div style=break-before:page;page-break-before:always></div><h1 id=reddit><a href=#reddit class=header>Reddit</a></h1><p>Tip:<blockquote><p>To filter out text posts it's recommended to use <code>New post from search</code> trigger and <code>subreddit:XYZ self:no</code> query, where <code>XYZ</code> is subreddit name.</blockquote><h2 id=reddit-embed><a href=#reddit-embed class=header>Reddit embed</a></h2><pre><code class=language-json>{
+  "content": "{{PostURL}}"
+}
+</code></pre><p><img alt="Reddit embed example" src=examples/../img/examples/reddit.png><h2 id=embed-with-text><a href=#embed-with-text class=header>Embed with text</a></h2><p>Image preview won't be shown and if content has more than 2048 characters, request will fail.<pre><code class=language-json>{
+  "embeds": [{
+    "color": 16729344,
+    "author": {
+      "name": "u/{{Author}}",
+      "url": "https://www.reddit.com/user/{{Author}}",
+      "icon_url": "https://avatar-resolver.vercel.app/reddit/{{Author}}"
+    },
+    "title": "&lt;&lt;&lt;{{Title}}>>>",
+    "url": "{{PostURL}}",
+    "description": "&lt;&lt;&lt;{{Content}}>>>",
+    "footer": { "text": "r/{{Subreddit}} • Posted at {{PostedAt}}" }
+  }]
+}
+</code></pre><p><img alt="Embed with text example" src=examples/../img/examples/reddit_text.png><h2 id=embed-with-image><a href=#embed-with-image class=header>Embed with image</a></h2><p><code>"file not found"</code> placeholder will be shown on text posts.<pre><code class=language-json>{
+  "embeds": [{
+    "color": 16729344,
+    "author": {
+      "name": "u/{{Author}}",
+      "url": "https://www.reddit.com/user/{{Author}}",
+      "icon_url": "https://avatar-resolver.vercel.app/reddit/{{Author}}"
+    },
+    "title": "&lt;&lt;&lt;{{Title}}>>>",
+    "url": "{{PostURL}}",
+    "image": { "url": "{{ImageURL}}" },
+    "footer": { "text": "r/{{Subreddit}} • Posted at {{PostedAt}}" }
+  }]
+}
+</code></pre><p><img alt="Embed with image example" src=examples/../img/examples/reddit_image.png><h2 id=link-embed><a href=#link-embed class=header>Link embed</a></h2><p>Best with link post which are video or GIFs. <code>"allowed_mentions"</code> will disable everyone/here mentions in content if there any, user/role mentions will still work if you wish to add any. big text posts (over 1k characters).<pre><code class=language-json>{
+  "content": "New Post in **r/{{Subreddit}}** by **u/{{Author}}**\n**&lt;&lt;&lt;{{Title}}>>>**\n&lt;&lt;&lt;{{Content}}>>>",
+  "allowed_mentions": { "parse": ["users", "roles"] }
+}
+</code></pre><p><img alt="Link embed example" src=examples/../img/examples/reddit_link.png><h2 id=filter-code-1><a href=#filter-code-1 class=header>Filter code</a></h2><p>Adds text to embed for text posts and image for link ones, shortens content so it doesn't break the body<pre><code class=language-ts>const body: any = {
+  embeds: [{
+    color: 0xFF4500,
+    author: {
+      name: `u/${Trigger.Author}`,
+      url: `https://www.reddit.com/user/${Trigger.Author}`,
+      icon_url: `https://avatar-resolver.vercel.app/reddit/${Trigger.Author}`
+    },
+    title: Trigger.Title,
+    url: Trigger.PostURL,
+    footer: { text: `r/${Trigger.Subreddit}` },
+    timestamp: Meta.triggerTime // returns null | use .currentUserTime for now
+  }]
+};
+if (/^http\S+$/.test(Trigger.Content)) {
+  body.embeds[0].image = { url: Trigger.ImageURL };
+} else {
+  body.embeds[0].description = Trigger.Content.slice(0, 2048);
+}
+MakerWebhooks.makeWebRequest.setBody(JSON.stringify(body));
+</code></pre><p><img alt="Filter code image example" src=examples/../img/examples/reddit_filter_image.png><p><img alt="Filter code text example" src=examples/../img/examples/reddit_filter_text.png><div style=break-before:page;page-break-before:always></div><h1 id=twitter><a href=#twitter class=header>Twitter</a></h1><h2 id=twitter-embed><a href=#twitter-embed class=header>Twitter embed</a></h2><pre><code class=language-json>{
+  "content": "{{LinkToTweet}}"
+}
+</code></pre><p><img alt="Twitter embed example" src=examples/../img/examples/twitter.png><h2 id=custom-embed-1><a href=#custom-embed-1 class=header>Custom embed</a></h2><p>Custom embed won't show image or video.<pre><code class=language-json>{
+  "embeds": [{
+    "color": 1942002,
+    "author": {
+      "name": "{{UserName}}",
+      "url": "https://twitter.com/{{UserName}}",
+      "icon_url": "https://avatar-resolver.vercel.app/twitter/{{UserName}}"
+    },
+    "title": "Link",
+    "url": "{{LinkToTweet}}",
+    "description": "&lt;&lt;&lt;{{Text}}>>>",
+    "footer": {
+      "text": "Posted at {{CreatedAt}}"
+    }
+  }]
+}
+</code></pre><p><img alt="custom embed example" src=examples/../img/examples/twitter_custom.png><div style=break-before:page;page-break-before:always></div><h1 id=youtube><a href=#youtube class=header>YouTube</a></h1><h2 id=youtube-embed><a href=#youtube-embed class=header>YouTube embed</a></h2><pre><code class=language-json>{
+  "content": "{{Url}}"
+}
+</code></pre><p><img alt="YouTube example" src=examples/../img/examples/youtube.png><h2 id=custom-embed-2><a href=#custom-embed-2 class=header>Custom embed</a></h2><p>Embed includes thumbnail without ability to watch it in Discord.<pre><code class=language-json>{
+  "embeds": [{
+    "color": 16711680,
+    "author": {
+      "name": "&lt;&lt;&lt;{{ChannelName}}>>>",
+      "icon_url": "https://avatar-resolver.vercel.app/youtube-avatar/q?url={{Url}}"
+    },
+    "title": "&lt;&lt;&lt;{{Title}}>>>",
+    "url": "{{Url}}",
+    "description": "&lt;&lt;&lt;{{Description}}>>>",
+    "image": { "url": "https://avatar-resolver.vercel.app/youtube-thumbnail/q?url={{Url}}" },
+    "footer": { "text": "Published at {{PublishedAt}}" }
+  }]
+}
+</code></pre><p><img alt="YouTube example" src=examples/../img/examples/youtube_custom.png><div style=break-before:page;page-break-before:always></div><h1 id=edit-webhook-message><a href=#edit-webhook-message class=header>Edit Webhook Message</a></h1><p>Identically to sending messages with webhooks you can edit previously sent ones. For that you need to have message id which can be copied with right-clicking on the message and selecting <code>Copy Message ID</code> from context menu (<code>Developer Mode</code> has to be enabled in user settings). Alternatively, id can be retrieved from response after webhook sending request (<code>wait=true</code> has to be present in query).<ul><li><p>Request URL is <code>https://discord.com/api/webhooks/123/w3bh00k_t0k3n/messages/456</code>, where <code>456</code> is message id.<li><p>Request verb has to be set to <code>PATCH</code> instead of <code>POST</code>.<li><p>Request body is identical to the one we use for sending, but you have to consider next things:<ul><li>Not providing <code>content</code> and <code>embeds</code> won't remove them from message, for that you have to pass empty string (<code>"content": ""</code>) and array (<code>"embeds": []</code>) respectively.<li>Attachments will be appended instead of replaced, to remove all attachments pass <code>attachments</code> with empty array in value (<code>"attachments": []</code>). If you want some of them to persist provide them in the same <code>attachments</code> array (attachment objects have to be retrieved from previous edit or send responses)</ul></ul><p><a href=https://discord.com/developers/docs/resources/webhook#edit-webhook-message>Discord API reference</a><div style=break-before:page;page-break-before:always></div><h1 id=rate-limits><a href=#rate-limits class=header>Rate Limits</a></h1><p>Rate limits, or on other words limitation of request rate, allow to limit usage os specific APIs. In case you've been using IFTTT you'll likely encountered rate limit errors as updates from your triggers are sent in bulk with no rate limit handling.<p>If to sum it up you can send <strong>5</strong> requests per <strong>2</strong> seconds per webhook, failed requests count towards rate limit same as successful ones.<p>If you're writing or making some thing that would require sending big number of webhook messages you have to implement proper rate limit handling. All webhook links have separate webhooks, so if you have multiple created they won't affect each others. Thankfully, request responses include all needed headers:<ul><li><code>X-RateLimit-Limit</code> - number of requests that can be made during single rate limit window<li><code>X-RateLimit-Remaining</code> - number of remaining requests that can be made (decreases with each request, when it reaches zero next request will likely fail)<li><code>X-RateLimit-Reset</code> - Epoch time (seconds since 00:00:00 UTC on January 1, 1970) at which the rate limit resets<li><code>X-RateLimit-Reset-After</code> - Total time (in seconds) of when the current rate limit bucket will reset. Can have decimals to match previous millisecond rate limit precision<li><code>X-RateLimit-Bucket</code> - A unique string denoting the rate limit being encountered (non-inclusive of top-level resources in the path)</ul><p>So generally you have to save and check these values before sending new requests so your app won't run into rate limit issues.<p>Another anti-request fail measure would be retrying request in case it failed, but still relying on response headers.<p>So usual implementation should be queue to which requests for sending are being added, before each request we have to check response headers, if there's still space for another request (<code>X-RateLimit-Remaining</code> is greater than zero) perform one, otherwise wait <code>X-RateLimit-Reset-After</code> seconds or until after <code>X-RateLimit-Reset</code> time.<p><a href=https://discord.com/developers/docs/topics/rate-limits#header-format>Discord API reference</a><div style=break-before:page;page-break-before:always></div><h1 id=discord-markdown><a href=#discord-markdown class=header>Discord Markdown</a></h1><h2 id=text-formatting><a href=#text-formatting class=header>Text formatting</a></h2><p><img alt="discord markdown example" src=other/../img/other/discord_markdown.png><p><a href=https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline->Markdown Text 101</a> from Discord Support. Formatting works in all fields except <code>username</code>, embed's <code>title</code>, footer's <code>text</code>, that means <code>:emoji:</code> won't work there as well (except it's in Unicode).<h2 id=discord-tags><a href=#discord-tags class=header>Discord tags</a></h2><p>2 ways:<ol><li>Using developer mode: <code>User settings</code> ➤ <code>Advanced</code> ➤ <code>Developer Mode</code> ➤ enable. Now you can find id of any user, message, channel or server with right click ➤ Copy ID<li>Using magic backslash <code>\</code> escaping: Put it before (or if you're on iOS, surround with ``) user mention, mentionable role, channel tag or custom emoji and you will get unformatted data</ol><p><img alt="discord tags example" src=other/../img/other/discord_markdown_2.png><p>This thing must be mentioned somewhere because some of you want to use this in messages.<div class=table-wrapper><table><thead><tr><th style=text-align:center>How it writes<th style=text-align:center>How it looks<tbody><tr><td style=text-align:center><code>&lt;@&role-id></code><td style=text-align:center><code>@role-name</code><tr><td style=text-align:center><code>&lt;#channel-id></code><td style=text-align:center><code>#channel-name</code><tr><td style=text-align:center><code>&lt;@user-id></code><td style=text-align:center><code>@mention</code><tr><td style=text-align:center><code>&lt;:custom_emoji_name:emoji-id></code><td style=text-align:center><code>:custom_emoji_name:</code></table></div><p><a href=https://discord.com/developers/docs/reference#message-formatting-formats>Discord API reference for available tags</a><h2 id=discord-timestamp><a href=#discord-timestamp class=header>Discord timestamp</a></h2><p>Discord added support of dynamic timestamps that allow you to reference specific date and time so it will show dynamically for everyone depending on timezone they're in and Discord language setting. You can generate them by hand (need <a href=https://www.unixtimestamp.com/ >Unix timestamp</a>) or using one of these websites:<ul><li><a href=https://r.3v.fi/discord-timestamps/ >r.3v.fi/discord-timestamps</a><li><a href=https://www.timestamps.app/ >timestamps.app</a></ul><p>Result string should look like this: <code>&lt;t:1577836800></code> or <code>&lt;t:1577836800:t></code><p><a href=https://discord.com/developers/docs/reference#message-formatting-timestamp-styles>Discord API reference for available formatting styles</a><div style=break-before:page;page-break-before:always></div><h1 id=slack-formatting><a href=#slack-formatting class=header>Slack formatting</a></h1><p>Discord webhooks support <a href=https://slack.com/ >Slack</a> formatting too. Just append <code>/slack</code> to webhook url to start using it.<h2 id=first-layer><a href=#first-layer class=header>First layer</a></h2><div class=table-wrapper><table><thead><tr><th>Discord<th>Slack<th>Comment<tbody><tr><td>username<td>username<td><tr><td>avatar_url<td>icon_url<td><tr><td>content<td>text<td><tr><td>embeds<td>attachments<td></table></div><h2 id=embeds-attachments><a href=#embeds-attachments class=header>embeds (attachments)</a></h2><div class=table-wrapper><table><thead><tr><th>Discord<th>Slack<th>Comment<tbody><tr><td>color<td>color<td>supports hex codes <code>"#4c73c7"</code> and has three predefined colors: <code>good</code>(green), <code>warning</code>(yellow) and <code>danger</code>(red).<tr><td>author<td>-<td>author block declares in different way. See the <code>author</code> table.<tr><td>title<td>title<td><tr><td>url<td>title_link<td><tr><td>description<td>text<td><tr><td>fields<td>fields<td><tr><td>image<td>-<td>image block declares in different way. See the <a href=other/slack_formatting.html#image><code>image</code></a> table.<tr><td>thumbnail<td>-<td>thumbnail block declares in different way. See the <a href=other/slack_formatting.html#thumbnail><code>thumbnail</code></a> table.<tr><td>footer<td>footer<td>not a block. See the <a href=other/slack_formatting.html#footer><code>footer</code></a> table<tr><td>timestamp<td>ts<td>requires <a href=https://www.unixtimestamp.com/ >unix timestamp</a> format.<tr><td>-<td>fallback<td>embed summary for notifications. Not sure if Discord supports that.<tr><td>-<td>pretext<td>kinda broken atm. Should works as "content" before embed, but it just appends to "description".</table></div><h3 id=author-1><a href=#author-1 class=header>author</a></h3><div class=table-wrapper><table><thead><tr><th>Discord<th>Slack<th>Comment<tbody><tr><td>name<td>author_name<td>just write them inside of <code>attachments</code> like <code>color</code> or etc.<tr><td>url<td>author_link<td><tr><td>icon_url<td>author_icon<td></table></div><h3 id=fields-1><a href=#fields-1 class=header>fields</a></h3><div class=table-wrapper><table><thead><tr><th>Discord<th>Slack<th>Comment<tbody><tr><td>name<td>title<td><tr><td>value<td>value<td><tr><td>inline<td>short<td></table></div><h3 id=image-1><a href=#image-1 class=header>image</a></h3><div class=table-wrapper><table><thead><tr><th>Discord<th>Slack<th>Comment<tbody><tr><td>url<td>image_url<td>no <code>image</code> block. Just write them inside of <code>attachments</code> like <code>color</code> or etc.</table></div><h3 id=thumbnail-1><a href=#thumbnail-1 class=header>thumbnail</a></h3><div class=table-wrapper><table><thead><tr><th>Discord<th>Slack<th>Comment<tbody><tr><td>url<td>thumb_url<td>no <code>thumbnail</code> block. Just write them inside of <code>attachments</code> like <code>color</code> or etc.</table></div><h3 id=footer-1><a href=#footer-1 class=header>footer</a></h3><div class=table-wrapper><table><thead><tr><th>Discord<th>Slack<th>Comment<tbody><tr><td>text<td>footer<td>no <code>footer</code> block. Just write them inside of <code>attachments</code> like <code>color</code> or etc.<tr><td>icon<td>footer_icon<td></table></div><h2 id=example-2><a href=#example-2 class=header>Example</a></h2><p>Slack formatted example from <a href=other/discord_webhook.html>here</a>:<pre><code class=language-json>{
+  "username": "Webhook",
+  "icon_url": "https://i.imgur.com/4M34hi2.png",
+  "text": "Text message. Up to 2000 characters.",
+  "attachments": [
+    {
+      "author_name": "Birdie♫",
+      "author_link": "https://www.reddit.com/r/cats/",
+      "author_icon": "https://i.imgur.com/R66g1Pe.jpg",
+      "title": "Title",
+      "title_link": "https://google.com/",
+      "text": "Text message. You can use Markdown here. *Italic* **bold** __underline__ ~~strikeout~~ [hyperlink](https://google.com) `code`",
+      "color": "#e8d44f",
+      "fields": [
+        {
+          "title": "Text",
+          "value": "More text",
+          "short": true
+        },
+        {
+          "title": "Even more text",
+          "value": "Yup",
+          "short": true
+        },
+        {
+          "title": "Use `\"inline\": true` parameter, if you want to display fields in the same line.",
+          "value": "okay..."
+        },
+        {
+          "title": "Thanks!",
+          "value": "You're welcome :wink:"
+        }
+      ],
+      "thumb_url": "https://upload.wikimedia.org/wikipedia/commons/3/38/4-Nature-Wallpapers-2014-1_ukaavUI.jpg",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/5a/A_picture_from_China_every_day_108.jpg",
+      "footer": "Woah! So cool! :smirk:",
+      "footer_icon": "https://i.imgur.com/fKL31aD.jpg"
+    }
+  ]
+}
+</code></pre><h3 id=additional-info><a href=#additional-info class=header>Additional info:</a></h3><ul><li><a href=https://discord.com/developers/docs/resources/webhook#execute-slackcompatible-webhook>Execute Slack-Compatible Webhook</a><li><a href=https://api.slack.com/messaging/webhooks>Incoming Webhooks</a><li><a href=https://api.slack.com/reference/surfaces/formatting>Basic message formatting</a><li><a href=https://api.slack.com/messaging/composing/layouts#attachments>Attaching content and links to messages</a></ul><div style=break-before:page;page-break-before:always></div><h1 id=field-limits><a href=#field-limits class=header>Field Limits</a></h1><div class=table-wrapper><table><thead><tr><th>Field<th>Limit<tbody><tr><td><code>username</code><td>1-80 characters<tr><td><code>content</code><td>2000 characters<tr><td><code>embeds</code><td>10 embed objects<tr><td><code>title</code>*<td>256 characters<tr><td><code>description</code>*<td>4096 characters<tr><td><code>author.name</code>*<td>256 characters<tr><td><code>fields</code><td>25 field objects<tr><td><code>field.name</code>*<td>256 characters<tr><td><code>field.value</code>*<td>1024 characters<tr><td><code>footer.text</code>*<td>2048 characters<tr><td><code>file</code> (not actual field name)<td>10 files<tr><td>sum of characters in marked fields<td>6000 characters</table></div><p><a href=https://discord.com/developers/docs/resources/channel#embed-object-embed-limits>Discord API reference</a><div style=break-before:page;page-break-before:always></div><h1 id=epilogue><a href=#epilogue class=header>Epilogue</a></h1><p>I hope this guide will help you make cool things for your server. I spent on this guide a lot of time with checking Discord API documentation and testing webhooks with different parameters. The main reason why I made this guide is there was no detailed guide about using webhooks. Existing ones describe using webhooks with known services with pre-made json body without showing how flexible settings are. Existing ones were like <em>copy & paste</em> and nothing more. I do not like that.<p>If you wanna suggest something, like Applet recipe or something fancy, please, let me know. My Discord tag is <code>birdie0</code> (was <code>Birdie♫#6017</code>).<p>Also I want to say thank next people:<ul><li><code>legioncabal</code> (<code>LEGION#0240</code>) - grammar fixes and pre-release testing<li><code>woody5728</code> (<code>Delta#5728</code>) - pre-release testing<li><code>wolfgang1710</code> (<code>WolfGang1710#6782</code>) - pre-release testing<li><code>darkpro1337</code> (<code>DarkPro1337#4304</code>) - Russian translation</ul><p>Thank you all, you are awesome!!!<div style=break-before:page;page-break-before:always></div><h1 id=contributing><a href=#contributing class=header>Contributing</a></h1><p>Repo is public now, if you have any suggestions, fixes or improvements, feel free to open issue or create pull request.<p>Feel free to contact me on Discord, my Discord tag is <code>birdie0</code> (was <code>Birdie♫#6017</code>). If you have no mutual servers with me you can always find me on <a href=https://discord.gg/ifttt>the r/IFTTT Discord server</a>.<p>Things that are planned, but not in progress at the moment:<ul><li>Guide in pictures (some people understand visual information better)<li>Guides for <a href=https://pipedream.com/ >Pipedream</a>, <a href=https://zapier.com/ >Zapier</a> and <a href=https://www.make.com/en>Make</a> (formerly Integromat) services<li>Guides for <a href=https://install.advancedrestclient.com/install>Advanced REST Client</a>, including mobile clients and iOS Shortcuts<li>Common mistakes and solutions<li>More examples<li>Translations (if you want to make or made one already, please, let me know)</ul></main><nav aria-label="Page navigation" class=nav-wrapper><div style=clear:both></div></nav></div></div><nav aria-label="Page navigation" class=nav-wide-wrapper></nav></div><script>window.playground_copyable=!0</script><script src=elasticlunr.min.js></script><script src=mark.min.js></script><script src=searcher.js></script><script src=clipboard.min.js></script><script src=highlight.js></script><script src=book.js></script><script>window.addEventListener("load",function(){window.setTimeout(window.print,100)})</script></div>
