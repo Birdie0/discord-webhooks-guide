@@ -1,6 +1,6 @@
 # Structure of Webhook
 
-Before using Webhooks you have to know the structure. All elements listed here are *optional* but request body should contain `content`, `embeds` or attachments, otherwise request will fail.
+Before using Webhooks you have to know the structure. All elements listed here are *optional* but request body should contain `content`, `embeds`, `poll` or attachments, otherwise request will fail.
 
 * `username` - overrides the predefined username of the webhook
 * `avatar_url` - overrides the predefined avatar of the webhook
@@ -26,6 +26,17 @@ Before using Webhooks you have to know the structure. All elements listed here a
     * `text` - footer text, doesn't support Markdown
     * `icon_url` - url of footer icon
   * `timestamp` - ISO8601 timestamp (`yyyy-mm-ddThh:mm:ss.msZ`)
+* `poll` - poll object
+  * `question` - poll question object
+    * `text` - poll question text
+  * `answers` - array of poll answer objects
+    * `poll_media` - poll answer object
+      * `text` - poll answer text
+      * `emoji` - emoji object (optional)
+        * `id` - id of emoji (if custom)
+        * `name` - name of emoji (if built-in)
+  * `duration` - duration of the poll in hours
+  * `allow_multiselect` - if true, allows to select multiple answers
 * `tts` - makes message to be spoken as with `/tts` command
 * `allowed_mentions` - object allowing to control who will be mentioned by message
   * `parse` - array, can include next values: `"roles"`, `"users"` and `"everyone"`, depends on which decides which mentions work. If empty, none mention work.

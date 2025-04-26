@@ -20,6 +20,7 @@
   * [thumbnail](structure/embed/thumbnail.md)
   * [footer](structure/embed/footer.md)
   * [timestamp](structure/embed/timestamp.md)
+* [poll](structure/poll.md)
 * [tts](structure/tts.md)
 * [allowed_mentions](structure/allowed_mentions.md)
 * [file](structure/file.md)
