@@ -29,11 +29,11 @@ Example:
         "poll_media": {
           "text": "meow!",
           "emoji": {
-            "name": "🐱"
+            "id": "1365720705324421202"
           }
         }
       },
-            {
+      {
         "poll_media": {
           "text": "woof!",
           "emoji": {
