@@ -1,15 +1,15 @@
 # allowed_mentions
 
-Allows to suppress pings by users, roles or everyone/here mentions. `allowed_mentions` object and can contain next parameters:
+Allows to suppress pings by user, role and everyone/here mentions. `allowed_mentions` object can contain the next parameters:
 
-* `parse` - array and can include next values:
+* `parse` - array, can include next values:
   * "everyone" - if present everyone/here will ping.
   * "users" - if present user mentions will ping.
   * "roles" - if present role mentions will ping.
-* `users` - array with id of users, allows to limit which users may be pinged.
-* `roles` - array with id of roles, allows to limit which roles may be pinged.
+* `users` - array with user ids, allows to limit which users may be pinged.
+* `roles` - array with role ids, allows to limit which roles may be pinged.
 
-Don't include `users` and `roles` both in `allowed_mentions` and `parse`, , if you want
+Important: `users` and `roles` are mutually exclusive per `allowed_mentions` and `parse` fields.
 
 Here's some examples:
 
