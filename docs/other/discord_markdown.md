@@ -34,6 +34,7 @@ Discord added support of dynamic timestamps that allow you to reference specific
 
 - [r.3v.fi/discord-timestamps](https://r.3v.fi/discord-timestamps/)
 - [timestamps.app](https://www.timestamps.app/)
+- [discordtimestampgen.com](https://discordtimestampgen.com/)
 
 Result string should look like this: `<t:1577836800>` or `<t:1577836800:t>`
 
